@@ -11,12 +11,12 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class App {
-    public static void geraArquivo(String nomeArquivo) throws FileNotFoundException, IOException {
+    public static void geraArquivo(String nomeArquivo, String sigla) throws FileNotFoundException, IOException {
         try(FileInputStream in = new FileInputStream(nomeArquivo);
             Reader r = new InputStreamReader(in, "ISO-8859-1");
             BufferedReader br = new BufferedReader(r);) 
         {
-            BufferedWriter buffWrite = new BufferedWriter(new FileWriter("teste.txt"));
+            BufferedWriter buffWrite = new BufferedWriter(new FileWriter("testes/teste"+sigla+".txt"));
 
             String linha=br.readLine();
 
@@ -83,7 +83,10 @@ public class App {
 
     public static void main(String[] args) throws IOException, FileNotFoundException {
         try {
-            geraArquivo("consulta_cand_2022_AC.csv");
+            Scanner scan = new Scanner(System.in);
+            String sigla=scan.nextLine();
+            geraArquivo("consulta_cand_2022/consulta_cand_2022_"+sigla+".csv", sigla);
+            scan.close();
         }
         catch (FileNotFoundException e) {
             System.out.println("d");
