@@ -76,13 +76,22 @@ public class App {
             BufferedWriter buffWrite = new BufferedWriter(new FileWriter("testesVotosDeputados/testeFederais"+sigla+".txt"));
             BufferedWriter buffeWrite = new BufferedWriter(new FileWriter("testesVotosDeputados/testeEstaduais"+sigla+".txt"));
 
+            Politico maisVotadoFederal = new Politico();
+            Politico maisVotadoEstadual = new Politico();
+
             for (Politico p : deputadosFederais) {
                 buffWrite.append(p+"\n");
+                if (p.getQuantidadeDeVotos()>maisVotadoFederal.getQuantidadeDeVotos())
+                    maisVotadoFederal=p;
             }
+            buffWrite.append("\nMais votado:\n"+maisVotadoFederal+"\n");
 
             for (Politico p : deputadosEstaduais) {
                 buffeWrite.append(p+"\n");
+                if (p.getQuantidadeDeVotos()>maisVotadoEstadual.getQuantidadeDeVotos())
+                    maisVotadoEstadual=p;
             }
+            buffeWrite.append("\nMais votado:\n"+maisVotadoEstadual+"\n");
 
             buffWrite.close();
             buffeWrite.close();
