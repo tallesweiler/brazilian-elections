@@ -75,18 +75,17 @@ public class App {
     }
 
     public static String fazLinhaDeputados(Scanner scan) {
-        String CD_CARGO;
-        String NR_CANDIDATO;
-        String NM_CANDIDATO;
-        String NM_URNA_CANDIDATO;
-        String NR_PARTIDO;
-        String SG_PARTIDO;
-        String NR_FEDERACAO;
-        String DT_NASCIMENTO;
-        String CD_GENERO;
-        String CD_SIT_TOT_TURNO;
-        String NM_TIPO_DESTINACAO_VOTOS;
-        String CD_SITUACAO_CANDIDATO_TOT;
+        String CD_CARGO;                    //6 para deputado federal e 7 para deputado estadual;
+        String NR_CANDIDATO;                //número do candidato;
+        String NM_URNA_CANDIDATO;           //nome do candidato na urna;
+        String NR_PARTIDO;                  //número do partido;
+        String SG_PARTIDO;                  //sigla do partido;
+        String NR_FEDERACAO;                //número da federação, com -1 representando candidato em partido isolado (que não participa de federação)
+        String DT_NASCIMENTO;               //data de nascimento do candidato no formato dd/mm/aaaa;
+        String CD_GENERO;                   //2 representando masculino e 4 representando feminino;
+        String CD_SIT_TOT_TURNO;            //2 ou 3 representando candidato eleito;
+        String NM_TIPO_DESTINACAO_VOTOS;    //quando for “Válido (legenda)” os votos deste candidato vão para a legenda (e devem ser computados para a legenda, mesmo em caso de CD_SITUACAO_CANDIDADO_TOT diferente de 2 ou 16)
+        String CD_SITUACAO_CANDIDATO_TOT;   //processar apenas aqueles com os valores 2 ou 16 que representam candidatos com candidatura deferida;
 
         scan.useDelimiter(";");
         passaDireto(13, scan);
@@ -99,12 +98,7 @@ public class App {
         passaDireto(1, scan);
         NR_CANDIDATO=scan.next();
         scan.useDelimiter(";");
-        passaDireto(1, scan);
-        scan.useDelimiter("\"");
-        passaDireto(1, scan);
-        NM_CANDIDATO=scan.next();
-        scan.useDelimiter(";");
-        passaDireto(1, scan);
+        passaDireto(2, scan);
         scan.useDelimiter("\"");
         passaDireto(1, scan);
         NM_URNA_CANDIDATO=scan.next();
@@ -150,13 +144,13 @@ public class App {
         CD_SITUACAO_CANDIDATO_TOT=scan.next();
         scan.nextLine();
 
-        return CD_CARGO+";"+NR_CANDIDATO+";"+NM_CANDIDATO+";"+NM_URNA_CANDIDATO+";"+NR_PARTIDO+";"+SG_PARTIDO+";"+NR_FEDERACAO+";"+DT_NASCIMENTO+";"+CD_GENERO+";"+CD_SIT_TOT_TURNO+";"+NM_TIPO_DESTINACAO_VOTOS+";"+CD_SITUACAO_CANDIDATO_TOT+";";
+        return CD_CARGO+";"+NR_CANDIDATO+";"+NM_URNA_CANDIDATO+";"+NR_PARTIDO+";"+SG_PARTIDO+";"+NR_FEDERACAO+";"+DT_NASCIMENTO+";"+CD_GENERO+";"+CD_SIT_TOT_TURNO+";"+NM_TIPO_DESTINACAO_VOTOS+";"+CD_SITUACAO_CANDIDATO_TOT+";";
     }
 
     public static String fazLinhaVotos(Scanner scan, Politico politico) {
-        String CD_CARGO;
-        String NR_VOTAVEL;
-        String QT_VOTOS;
+        String CD_CARGO;    //6 para deputado federal e 7 para deputado estadual;
+        String NR_VOTAVEL;  //o número do candidato no caso de voto nominal ou o número do partido se for voto na legenda. Os números 95, 96, 97, 98 representam casos de votos em branco, nulos ou anulados, e, como só estamos nos concentrando nos votos válidos, linhas com esses números devem ser ignoradas. Atenção, pois há casos em que NR_VOTAVEL é um número de candidato, porém este candidato tem seus votos nominais redirecionados para a legenda como indicado acima para NM_TIPO_DESTINACAO_VOTOS no arquivo de candidatos igual a “Válido (legenda)”
+        String QT_VOTOS;    //número de votos (no candidato ou no partido) na sessão.
 
         scan.useDelimiter(";");
         passaDireto(17, scan);
