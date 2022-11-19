@@ -9,13 +9,12 @@ public class Politico {
     private String tipoDeVoto;      // quando for “Válido (legenda)” os votos deste candidato vão para a legenda (e devem ser computados para a legenda, mesmo em caso de CD_SITUACAO_CANDIDADO_TOT diferente de 2 ou 16)
     private int situacaoCandidato;  // processar apenas aqueles com os valores 2 ou 16 que representam candidatos com candidatura deferida;
     private int quantidadeDeVotos;  // quantidade de votos obtidos
+    private Partido partido;
 
     public Politico(int cargo, int numeroDoCandidato, String nomeNaUrna, int numeroDoPartido, String siglaDoPartido, int numeroDaFederacao, String dataDeNascimento, int genero, int foiEleito, String tipoDeVoto, int situacaoCandidato) {
         this.cargo = cargo;
         this.numeroDoCandidato = numeroDoCandidato;
         this.nomeNaUrna = nomeNaUrna;
-        this.numeroDoPartido = numeroDoPartido;
-        this.siglaDoPartido = siglaDoPartido;
         this.numeroDaFederacao = numeroDaFederacao;
         this.dataDeNascimento = dataDeNascimento;
         this.genero = genero;
