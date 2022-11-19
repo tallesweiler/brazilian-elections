@@ -312,9 +312,9 @@ public class App {
             String sigla = scan.nextLine();
             LinkedList<Politico> deputadosFederais = new LinkedList<Politico>();
             LinkedList<Politico> deputadosEstaduais = new LinkedList<Politico>();
-            geraArquivoDeputados("consulta_cand_2022/consulta_cand_2022_" + sigla + ".csv", sigla, deputadosFederais,
+            geraArquivoDeputados("data/consulta_cand_2022/consulta_cand_2022_" + sigla + ".csv", sigla, deputadosFederais,
                     deputadosEstaduais);
-            geraArquivoVotos("arquivos_de_votacao/votacao_secao_2022_" + sigla + ".csv", sigla, deputadosFederais,
+            geraArquivoVotos("data/arquivos_de_votacao/votacao_secao_2022_" + sigla + ".csv", sigla, deputadosFederais,
                     deputadosEstaduais);
             geraArquivoVotosDeputados(sigla, deputadosFederais, deputadosEstaduais);
             scan.close();
