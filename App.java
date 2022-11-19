@@ -79,19 +79,54 @@ public class App {
             Politico maisVotadoFederal = new Politico();
             Politico maisVotadoEstadual = new Politico();
 
+            LinkedList<Politico> maisVotadosFederal = new LinkedList<Politico>();
+            LinkedList<Politico> maisVotadosEstadual = new LinkedList<Politico>();
+
             for (Politico p : deputadosFederais) {
                 buffWrite.append(p+"\n");
-                if (p.getQuantidadeDeVotos()>maisVotadoFederal.getQuantidadeDeVotos())
-                    maisVotadoFederal=p;
             }
-            buffWrite.append("\nMais votado:\n"+maisVotadoFederal+"\n");
+
+            for (int j=0;j<10;j++) {
+                for (Politico p : deputadosFederais) {
+                    if (p.getQuantidadeDeVotos()>maisVotadoFederal.getQuantidadeDeVotos())
+                        maisVotadoFederal=p;
+                }
+                maisVotadosFederal.add(maisVotadoFederal);
+                deputadosFederais.remove(maisVotadoFederal);
+                maisVotadoFederal = new Politico();
+            }
+
+            buffWrite.append("\nMais votados:\n");
+            int i=1;
+            for (Politico p : maisVotadosFederal) {
+                buffWrite.append(i +" - "+p.getNomeNaUrna()+" ("+p.getSiglaDoPartido()+", "+p.getQuantidadeDeVotos()+" votos)"+"\n");
+                i++;
+            }
+
+
+            //=============================================================================//
 
             for (Politico p : deputadosEstaduais) {
                 buffeWrite.append(p+"\n");
-                if (p.getQuantidadeDeVotos()>maisVotadoEstadual.getQuantidadeDeVotos())
-                    maisVotadoEstadual=p;
             }
-            buffeWrite.append("\nMais votado:\n"+maisVotadoEstadual+"\n");
+
+            for (int j=0;j<10;j++) {
+                for (Politico p : deputadosEstaduais) {
+                    if (p.getQuantidadeDeVotos()>maisVotadoEstadual.getQuantidadeDeVotos())
+                        maisVotadoEstadual=p;
+                }
+                maisVotadosEstadual.add(maisVotadoEstadual);
+                deputadosEstaduais.remove(maisVotadoEstadual);
+                maisVotadoEstadual = new Politico();
+            }
+
+            buffeWrite.append("\nMais votados:\n");
+            i=1;
+            for (Politico p : maisVotadosEstadual) {
+                buffeWrite.append(i +" - "+p.getNomeNaUrna()+" ("+p.getSiglaDoPartido()+", "+p.getQuantidadeDeVotos()+" votos)"+"\n");
+                i++;
+            }
+
 
             buffWrite.close();
             buffeWrite.close();
