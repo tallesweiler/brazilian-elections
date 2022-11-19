@@ -2,8 +2,6 @@ public class Politico {
     private int cargo;              // 6 federal 7 estadual
     private int numeroDoCandidato;  // numero do candidato na urna
     private String nomeNaUrna;      // nome do candidato na urna
-    private int numeroDoPartido;    // número do partido;
-    private String siglaDoPartido;  // sigla do partido;
     private int numeroDaFederacao;  // numero da federacao, -1 representando candidato em partido isolado(que nao participa de federacao)
     private String dataDeNascimento;// data de nascimento do candidato
     private int genero;             // 2 masculino 4 feminino  
