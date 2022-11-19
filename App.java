@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.util.LinkedList;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -24,9 +25,14 @@ public class App {
             String linha=br.readLine();
             linha=br.readLine();
 
+            LinkedList<Politico> deputadosFederais = new LinkedList<Politico>();
+            LinkedList<Politico> deputadosEstaduais = new LinkedList<Politico>();
+
             while(linha!=null) {
                 try (Scanner scan = new Scanner(linha)) {
-                    buffWrite.append(fazLinhaDeputados(scan) + "\n");
+                    String line=fazLinhaDeputados(scan, deputadosFederais, deputadosEstaduais);
+                    if (line!=null)
+                        buffWrite.append(line+"\n");
                     linha=br.readLine();
                 } catch(NoSuchElementException e) {
                     System.out.println("a");
@@ -74,24 +80,28 @@ public class App {
         }
     }
 
-    public static String fazLinhaDeputados(Scanner scan) {
-        int CD_CARGO;                    //6 para deputado federal e 7 para deputado estadual;
-        int NR_CANDIDATO;                //número do candidato;
+    public static String fazLinhaDeputados(Scanner scan, LinkedList<Politico> deputadosFederais, LinkedList<Politico> deputadosEstaduais) {
+        int CD_CARGO;                       //6 para deputado federal e 7 para deputado estadual;
+        int NR_CANDIDATO;                   //número do candidato;
         String NM_URNA_CANDIDATO;           //nome do candidato na urna;
-        int NR_PARTIDO;                  //número do partido;
+        int NR_PARTIDO;                     //número do partido;
         String SG_PARTIDO;                  //sigla do partido;
-        int NR_FEDERACAO;                //número da federação, com -1 representando candidato em partido isolado (que não participa de federação)
+        int NR_FEDERACAO;                   //número da federação, com -1 representando candidato em partido isolado (que não participa de federação)
         String DT_NASCIMENTO;               //data de nascimento do candidato no formato dd/mm/aaaa;
-        int CD_GENERO;                   //2 representando masculino e 4 representando feminino;
-        int CD_SIT_TOT_TURNO;            //2 ou 3 representando candidato eleito;
+        int CD_GENERO;                      //2 representando masculino e 4 representando feminino;
+        int CD_SIT_TOT_TURNO;               //2 ou 3 representando candidato eleito;
         String NM_TIPO_DESTINACAO_VOTOS;    //quando for “Válido (legenda)” os votos deste candidato vão para a legenda (e devem ser computados para a legenda, mesmo em caso de CD_SITUACAO_CANDIDADO_TOT diferente de 2 ou 16)
-        int CD_SITUACAO_CANDIDATO_TOT;   //processar apenas aqueles com os valores 2 ou 16 que representam candidatos com candidatura deferida;
+        int CD_SITUACAO_CANDIDATO_TOT;      //processar apenas aqueles com os valores 2 ou 16 que representam candidatos com candidatura deferida;
 
         scan.useDelimiter(";");
         passaDireto(13, scan);
         scan.useDelimiter("\"");
         passaDireto(1, scan);
         CD_CARGO=scan.nextInt();
+        if (CD_CARGO!=6 && CD_CARGO!=7) {
+            scan.nextLine();
+            return null;
+        }
         scan.useDelimiter(";");
         passaDireto(3, scan);
         scan.useDelimiter("\"");
@@ -144,7 +154,18 @@ public class App {
         CD_SITUACAO_CANDIDATO_TOT=scan.nextInt();
         scan.nextLine();
 
-        return CD_CARGO+";"+NR_CANDIDATO+";"+NM_URNA_CANDIDATO+";"+NR_PARTIDO+";"+SG_PARTIDO+";"+NR_FEDERACAO+";"+DT_NASCIMENTO+";"+CD_GENERO+";"+CD_SIT_TOT_TURNO+";"+NM_TIPO_DESTINACAO_VOTOS+";"+CD_SITUACAO_CANDIDATO_TOT+";";
+        if (CD_CARGO==6) {
+            Politico politico=new Politico(CD_CARGO,NR_CANDIDATO,NM_URNA_CANDIDATO,NR_PARTIDO,SG_PARTIDO,NR_FEDERACAO,DT_NASCIMENTO,CD_GENERO,CD_SIT_TOT_TURNO,NM_TIPO_DESTINACAO_VOTOS,CD_SITUACAO_CANDIDATO_TOT);
+            deputadosFederais.add(politico);
+            return ";"+CD_CARGO+";"+NR_CANDIDATO+";"+NM_URNA_CANDIDATO+";"+NR_PARTIDO+";"+SG_PARTIDO+";"+NR_FEDERACAO+";"+DT_NASCIMENTO+";"+CD_GENERO+";"+CD_SIT_TOT_TURNO+";"+NM_TIPO_DESTINACAO_VOTOS+";"+CD_SITUACAO_CANDIDATO_TOT+";";
+        }
+        else if (CD_CARGO==7) {
+            Politico politico=new Politico(CD_CARGO,NR_CANDIDATO,NM_URNA_CANDIDATO,NR_PARTIDO,SG_PARTIDO,NR_FEDERACAO,DT_NASCIMENTO,CD_GENERO,CD_SIT_TOT_TURNO,NM_TIPO_DESTINACAO_VOTOS,CD_SITUACAO_CANDIDATO_TOT);
+            deputadosEstaduais.add(politico);
+            return ";"+CD_CARGO+";"+NR_CANDIDATO+";"+NM_URNA_CANDIDATO+";"+NR_PARTIDO+";"+SG_PARTIDO+";"+NR_FEDERACAO+";"+DT_NASCIMENTO+";"+CD_GENERO+";"+CD_SIT_TOT_TURNO+";"+NM_TIPO_DESTINACAO_VOTOS+";"+CD_SITUACAO_CANDIDATO_TOT+";";
+        }
+
+        return null;
     }
 
     public static String fazLinhaVotos(Scanner scan, Politico politico) {
@@ -172,7 +193,7 @@ public class App {
         scan.nextLine();
 
         if (NR_VOTAVEL==politico.getNumeroDoCandidato())
-            politico.setQuantidadeDeVotos(politico.getQuantidadeDeVotos()+QT_VOTOS);
+            politico.adicionaVotos(QT_VOTOS);
 
         return CD_CARGO+";"+NR_VOTAVEL+";"+QT_VOTOS+";";
     }
