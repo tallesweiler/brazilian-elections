@@ -69,7 +69,7 @@ public class Partido {
     public Deputado deputadoMaisVotado() {
         Deputado deputadoMaisVotado = new Deputado();
         for(Deputado d : deputados.values()){
-            if(d.getQuantidadeDeVotos() > deputadoMaisVotado.getQuantidadeDeVotos()){
+            if(d.getQuantidadeDeVotos() > deputadoMaisVotado.getQuantidadeDeVotos() && (d.getSituacaoCandidato() == 2 || d.getSituacaoCandidato() == 16)){
                 deputadoMaisVotado = d;
             }
         }  
@@ -78,7 +78,7 @@ public class Partido {
     public Deputado deputadoMenosVotado() {
         Deputado deputadoMenosVotado = deputadoMaisVotado();
         for(Deputado d : deputados.values()){
-            if(d.getQuantidadeDeVotos() < deputadoMenosVotado.getQuantidadeDeVotos()){
+            if(d.getQuantidadeDeVotos() < deputadoMenosVotado.getQuantidadeDeVotos() && (d.getSituacaoCandidato() == 2 || d.getSituacaoCandidato() == 16)){
                 deputadoMenosVotado = d;
             }
         }  

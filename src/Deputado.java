@@ -1,13 +1,16 @@
 package src;
 
 import java.time.LocalDate;
+import java.time.Period;
 
 public class Deputado {
     private int cargo;                  // 6 federal 7 estadual
     private int numeroDoCandidato;      // numero do candidato na urna
     private String nomeNaUrna;          // nome do candidato na urna
     private int numeroDaFederacao;      // numero da federacao, -1 representando candidato em partido isolado(que nao participa de federacao)
-    private LocalDate dataDeNascimento;    // data de nascimento do candidato
+    private LocalDate dataDeNascimento; // data de nascimento do candidato
+    private int idade;                  // idade do candidato
+    private int idadeEmDias;            // idade do candidato para fins de comparação
     private int genero;                 // 2 masculino 4 feminino
     private int foiEleito;              // 2 ou 3 representam candidato eleito
     private String tipoDeVoto;          // quando for “Válido (legenda)” os votos deste candidato vão para a legenda (e devem ser computados para a legenda, mesmo em caso de CD_SITUACAO_CANDIDADO_TOT diferente de 2 ou 16)
@@ -21,8 +24,9 @@ public class Deputado {
         this.numeroDoCandidato = numeroDoCandidato;
         this.nomeNaUrna = nomeNaUrna;
         this.numeroDaFederacao = numeroDaFederacao;
-        this.dataDeNascimento=LocalDate.of(Integer.parseInt(ano), Integer.parseInt(mes), Integer.parseInt(dia));
-        System.out.println(dataDeNascimento);
+        this.dataDeNascimento = LocalDate.of(Integer.parseInt(ano), Integer.parseInt(mes), Integer.parseInt(dia));
+        this.idade = Period.between(dataDeNascimento, LocalDate.of(2022, 10, 2)).getYears();
+        this.idadeEmDias = Period.between(dataDeNascimento, LocalDate.of(2022, 10, 2)).getDays();
         this.genero = genero;
         this.foiEleito = foiEleito;
         this.tipoDeVoto = tipoDeVoto;
@@ -105,6 +109,18 @@ public class Deputado {
     }
     public void setTipoDeVoto(String tipoDeVoto) {
         this.tipoDeVoto = tipoDeVoto;
+    }
+    public int getIdade() {
+        return idade;
+    }
+    public void setIdade(int idade) {
+        this.idade = idade;
+    }
+    public int getIdadeEmDias() {
+        return idadeEmDias;
+    }
+    public void setIdadeEmDias(int idadeEmDias) {
+        this.idadeEmDias = idadeEmDias;
     }
 
     public void adicionaVotos(int valor) {

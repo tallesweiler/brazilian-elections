@@ -1,0 +1,98 @@
+Número de vagas: 8
+
+Deputados federais eleitos:
+1 - SOCORRO NERI (PP, 25842 votos)
+2 - MEIRE SERAFIM (UNIÃO, 21285 votos)
+3 - CORONEL ULYSSES (UNIÃO, 21075 votos)
+4 - ZEZINHO BARBARY (PP, 19958 votos)
+5 - GERLEN DINIZ (PP, 19560 votos)
+6 - DR EDUARDO VELLOSO (UNIÃO, 16786 votos)
+7 - ANTÔNIA LUCIA (REPUBLICANOS, 16280 votos)
+8 - ROBERTO DUARTE (REPUBLICANOS, 14522 votos)
+
+Candidatos mais votados (em ordem decrescente de votação e respeitando número de vagas):
+1 - SOCORRO NERI (PP, 25842 votos)
+2 - MEIRE SERAFIM (UNIÃO, 21285 votos)
+3 - CORONEL ULYSSES (UNIÃO, 21075 votos)
+4 - JESSICA SALES (MDB, 20500 votos)
+5 - ZEZINHO BARBARY (PP, 19958 votos)
+6 - GERLEN DINIZ (PP, 19560 votos)
+7 - *MINORU KINPARA (PSDB, 19077 votos)
+8 - DR EDUARDO VELLOSO (UNIÃO, 16786 votos)
+
+Teriam sido eleitos se a votação fosse majoritária, e não foram eleitos:
+(com sua posição no ranking de mais votados)
+4 - JESSICA SALES (MDB, 20500 votos)
+7 - *MINORU KINPARA (PSDB, 19077 votos)
+
+Eleitos, que se beneficiaram do sistema proporcional:
+(com sua posição no ranking de mais votados)
+9 - ANTÔNIA LUCIA (REPUBLICANOS, 16280 votos)
+11 - ROBERTO DUARTE (REPUBLICANOS, 14522 votos)
+
+Votação dos partidos e número de candidatos eleitos:
+1 - PP - 11, 93602 votos (91304 nominais e 2298 de legenda)
+2 - UNIÃO - 44, 84939 votos (83195 nominais e 1744 de legenda)
+3 - REPUBLICANOS - 10, 59017 votos (57575 nominais e 1442 de legenda)
+4 - MDB - 15, 39012 votos (37923 nominais e 1089 de legenda)
+5 - PSDB - 45, 33412 votos (32696 nominais e 716 de legenda)
+6 - PSD - 55, 24158 votos (23485 nominais e 673 de legenda)
+7 - PDT - 12, 21856 votos (19583 nominais e 2273 de legenda)
+8 - PODE - 19, 21069 votos (20239 nominais e 830 de legenda)
+9 - PT - 13, 20487 votos (18602 nominais e 1885 de legenda)
+10 - PC do B - 65, 15467 votos (15054 nominais e 413 de legenda)
+11 - PSB - 40, 6321 votos (5816 nominais e 505 de legenda)
+12 - SOLIDARIEDADE - 77, 4347 votos (3985 nominais e 362 de legenda)
+13 - REDE - 18, 3016 votos (2901 nominais e 115 de legenda)
+14 - PV - 43, 2092 votos (2030 nominais e 62 de legenda)
+15 - PATRIOTA - 51, 1483 votos (1151 nominais e 332 de legenda)
+16 - PROS - 90, 1369 votos (925 nominais e 444 de legenda)
+17 - PSOL - 50, 905 votos (802 nominais e 103 de legenda)
+18 - PSC - 20, 704 votos (680 nominais e 24 de legenda)
+19 - CIDADANIA - 23, 491 votos (392 nominais e 99 de legenda)
+20 - AGIR - 36, 323 votos (292 nominais e 31 de legenda)
+21 - PMN - 33, 183 votos (119 nominais e 64 de legenda)
+22 - PCO - 29, 3 votos (0 nominais e 3 de legenda)
+23 - PTB - 14, 0 votos (0 nominais e 0 de legenda)
+24 - PL - 22, 0 votos (0 nominais e 0 de legenda)
+25 - DC - 27, 0 votos (0 nominais e 0 de legenda)
+26 - PRTB - 28, 0 votos (0 nominais e 0 de legenda)
+27 - AVANTE - 70, 0 votos (0 nominais e 0 de legenda)
+
+Primeiro e último colocados de cada partido:
+1 - PP - 11, SOCORRO NERI (PP, 25842 votos) / GIL TEIXEIRA (PP, 647 votos)
+2 - UNIÃO - 44, MEIRE SERAFIM (UNIÃO, 21285 votos) / LUIZ ANUTE (UNIÃO, 1332 votos)
+3 - MDB - 15, JESSICA SALES (MDB, 20500 votos) / ALDA RADINE (MDB, 32 votos)
+4 - PSDB - 45, MINORU KINPARA (PSDB, 19077 votos) / MARCIA MARIA (PSDB, 253 votos)
+5 - REPUBLICANOS - 10, ANTÔNIA LUCIA (REPUBLICANOS, 16280 votos) / KATIANNY ARAÚJO (REPUBLICANOS, 90 votos)
+6 - PC do B - 65, PERPETUA ALMEIDA (PC do B, 14914 votos) / ZÉ DA ROSA (PC do B, 140 votos)
+7 - PT - 13, LEO DE BRITO (PT, 12304 votos) / IRENÍ UCHÔA (PT, 464 votos)
+8 - PDT - 12, JESUS SÉRGIO (PDT, 9536 votos) / RÔ DA BASE (PDT, 165 votos)
+9 - PSD - 55, JESUITA ARRUDA (PSD, 6148 votos) / MOISES MEDEIROS (PSD, 933 votos)
+10 - PODE - 19, RODRIGO DAMASCENO (PODE, 5919 votos) / ISRAEL AQUILA (PODE, 372 votos)
+11 - PSB - 40, DR THOR DANTAS (PSB, 3424 votos) / KELLY CRISTINA  (PSB, 245 votos)
+12 - REDE - 18, NINAWA HUNI KUI (REDE, 2794 votos) / IUNA CHAVES (REDE, 107 votos)
+13 - PV - 43, CLAUDIO EZEQUIEL (PV, 1941 votos) / PROTETORA MAURA AKINO (PV, 89 votos)
+14 - SOLIDARIEDADE - 77, JANES PETECA (SOLIDARIEDADE, 1636 votos) / EDI CELULAR (SOLIDARIEDADE, 120 votos)
+15 - PATRIOTA - 51, PASTOR ANTÔNIO JOSÉ (PATRIOTA, 595 votos) / NAZARE PEIXOTO (PATRIOTA, 21 votos)
+16 - PSC - 20, SGT CARLOS TANACA (PSC, 327 votos) / LUANA ARAÚJO (PSC, 107 votos)
+17 - CIDADANIA - 23, CARLOS LEANDRO (CIDADANIA, 273 votos) / PASTORA ODETE (CIDADANIA, 119 votos)
+18 - PROS - 90, ROBERTO DA PRINCEZINHA (PROS, 230 votos) / EDNA NANTES (PROS, 22 votos)
+19 - PSOL - 50, WILLIAM FRANÇA (PSOL, 217 votos) / CRISTINA CARUTA (PSOL, 114 votos)
+20 - AGIR - 36, SARAIVA GAMA (AGIR, 105 votos) / SORAIA RAMALHO (AGIR, 13 votos)
+21 - PMN - 33, ANTONIO DANTAS (PMN, 50 votos) / ROZANA SOUSA (PMN, 29 votos)
+
+Eleitos, por faixa etária (na data da eleição):
+      Idade < 30: 0 (0.0%)
+30 <= Idade < 40: 0 (0.0%)
+40 <= Idade < 50: 5 (62.5%)
+50 <= Idade < 60: 3 (37.5%)
+60 <= Idade     : 0 (0.0%)
+
+Eleitos, por gênero:
+Feminino:  3 (37.5%)
+Masculino: 5 (62.5%)
+
+Total de votos válidos:    434256
+Total de votos nominais:   418749 (96.42907%)
+Total de votos de legenda: 15507 (3.5709352%)
