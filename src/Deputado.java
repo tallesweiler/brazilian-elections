@@ -27,9 +27,7 @@ public class Deputado {
         this.numeroDoPartido = numeroDoPartido;
         this.siglaDoPartido = siglaDoPartido;
     }
-
-    public Deputado() {
-    }
+    public Deputado(){}
 
     public int getCargo() {
         return cargo;

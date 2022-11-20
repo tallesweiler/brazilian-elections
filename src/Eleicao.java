@@ -11,14 +11,23 @@ import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 public class Eleicao {
     private Map<Integer, Partido> partidos;
+    private LinkedList<Deputado> deputadosEleitos;
+    private LinkedList<Deputado> deputados;
+    private int vagas;
 
     public Eleicao(){
         this.partidos = new HashMap<>();
+        this.deputadosEleitos = new LinkedList<>();
+        this.deputados = new LinkedList<>();
+        this.vagas = 0;
     }
 
     public void preencheDeputados(String nomeArquivo, String sigla, int cargo) throws FileNotFoundException, IOException {
@@ -53,17 +62,17 @@ public class Eleicao {
     }
 
     private Deputado preencheDeputado(Scanner scan, int cargo) {
-        int CD_CARGO;                   //6 para deputado federal e 7 para deputado estadual;
-        int NR_CANDIDATO;               //número do candidato;
-        String NM_URNA_CANDIDATO;       //nome do candidato na urna;
-        int NR_PARTIDO;                 //número do partido;
-        String SG_PARTIDO;              //sigla do partido;
-        int NR_FEDERACAO;               //número da federação, com -1 representando candidato em partido isolado (que não participa de federação)
-        String DT_NASCIMENTO;           //data de nascimento do candidato no formato dd/mm/aaaa;
-        int CD_GENERO;                  //2 representando masculino e 4 representando feminino;
-        int CD_SIT_TOT_TURNO;           //2 ou 3 representando candidato eleito;
-        String NM_TIPO_DESTINACAO_VOTOS;//quando for “Válido (legenda)” os votos deste candidato vão para a legenda (e devem ser computados para a legenda, mesmo em caso de CD_SITUACAO_CANDIDADO_TOT diferente de 2 ou 16)
-        int CD_SITUACAO_CANDIDATO_TOT;  //processar apenas aqueles com os valores 2 ou 16 que representam candidatos com candidatura deferida;
+        int CD_CARGO;                       // 6 para deputado federal e 7 para deputado estadual;
+        int NR_CANDIDATO;                   // número do candidato;
+        String NM_URNA_CANDIDATO;           // nome do candidato na urna;
+        int NR_PARTIDO;                     // número do partido;
+        String SG_PARTIDO;                  // sigla do partido;
+        int NR_FEDERACAO;                   // número da federação, com -1 representando candidato em partido isolado (que não participa de federação)
+        String DT_NASCIMENTO;               // data de nascimento do candidato no formato dd/mm/aaaa;
+        int CD_GENERO;                      // 2 representando masculino e 4 representando feminino;
+        int CD_SIT_TOT_TURNO;               // 2 ou 3 representando candidato eleito;
+        String NM_TIPO_DESTINACAO_VOTOS;    // quando for “Válido (legenda)” os votos deste candidato vão para a legenda (e devem ser computados para a legenda, mesmo em caso de CD_SITUACAO_CANDIDADO_TOT diferente de 2 ou 16)
+        int CD_SITUACAO_CANDIDATO_TOT;      // processar apenas aqueles com os valores 2 ou 16 que representam candidatos com candidatura deferida;
 
         scan.useDelimiter(";");
         passaDireto(13, scan);
@@ -131,7 +140,12 @@ public class Eleicao {
         }
         */
         Deputado novoDeputado = new Deputado(CD_CARGO, NR_CANDIDATO, NM_URNA_CANDIDATO, NR_PARTIDO, SG_PARTIDO, NR_FEDERACAO, DT_NASCIMENTO, CD_GENERO, CD_SIT_TOT_TURNO, NM_TIPO_DESTINACAO_VOTOS, CD_SITUACAO_CANDIDATO_TOT);
-        //System.out.println(novoDeputado);
+
+        if(CD_SIT_TOT_TURNO == 2 || CD_SIT_TOT_TURNO == 3){
+            vagas++;
+            deputadosEleitos.add(novoDeputado);
+        };
+
         return novoDeputado;
     }
 
@@ -203,27 +217,56 @@ public class Eleicao {
 
             Partido partidoTemp = partidos.get(NR_PARTIDO);
             Deputado deputadoTemp = partidoTemp.retornaDeputado(NR_VOTAVEL);
-            if(deputadoTemp != null && (deputadoTemp.getSituacaoCandidato() == 2 || deputadoTemp.getSituacaoCandidato() == 16)){
-                deputadoTemp.adicionaVotos(QT_VOTOS);
-                partidoTemp.adicionaVotos(QT_VOTOS);
+            if(deputadoTemp != null){
+                if (deputadoTemp.getTipoDeVoto() == "Válido (legenda)"){
+                    partidoTemp.adicionaVotosDeLegenda(QT_VOTOS);
+                }
+                else if(deputadoTemp.getSituacaoCandidato() == 2 || deputadoTemp.getSituacaoCandidato() == 16){
+                    deputadoTemp.adicionaVotos(QT_VOTOS);
+                    partidoTemp.adicionaVotosNominais(QT_VOTOS);
+                }
             }
         }
         else{
             Partido partidoTemp = partidos.get(NR_VOTAVEL);
-            partidoTemp.adicionaVotos(QT_VOTOS);
+            partidoTemp.adicionaVotosDeLegenda(QT_VOTOS);
         }
     }
 
+    private void passaDireto(int i, Scanner scan) {
+        for (int aux=0;aux<i;aux++) {
+            scan.next();
+        }
+    }
+
+    public void preencheTodosDeputados(){
+        for(Partido p : partidos.values()){
+            for(Deputado d : p.getDeputados().values()){
+                deputados.add(d);
+            }
+        }
+    }
+
+    public void ordenaDeputadosPorQuantidadeDeVotos(LinkedList<Deputado> deputados, int ordem){
+        Collections.sort(deputados, new Comparator<Deputado>() {
+            @Override
+            public int compare(Deputado d1, Deputado d2) { 
+                return d2.getQuantidadeDeVotos() - d1.getQuantidadeDeVotos(); 
+            } 
+        } );
+    }
+    
     public void imprimePartidos(){
+        System.out.println("Número de vagas: " + vagas + "\n");
         for(Partido p : partidos.values()){
             System.out.println(p);
             System.out.println();
         }
     }
-    
-    private void passaDireto(int i, Scanner scan) {
-        for (int aux=0;aux<i;aux++) {
-            scan.next();
+
+    public void imprimeEleitos(){
+        for(Deputado d: deputadosEleitos){
+            System.out.println(d);
         }
     }
 }

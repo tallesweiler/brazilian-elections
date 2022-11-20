@@ -15,6 +15,8 @@ public class App {
             //eleicao.imprimePartidos();
             eleicao.preencheVotosDeputados("data/votacao_secao_2022/votacao_secao_2022_"+sigla+".csv", sigla, 6);
             eleicao.imprimePartidos();
+            eleicao.ordenaDeputadosPorQuantidadeDeVotos();
+            eleicao.imprimeEleitos();
             scan.close();
         }
         catch (FileNotFoundException e) {
