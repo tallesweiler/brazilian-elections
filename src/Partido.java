@@ -1,6 +1,8 @@
 package src;
 
+import java.text.NumberFormat;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class Partido {
@@ -8,6 +10,8 @@ public class Partido {
     private String siglaDoPartido; // sigla do partido;
     private int quantidadeDeVotosNominais;
     private int quantidadeDeVotosDeLegenda;
+    private int qtdDeputadosEleitos;
+
     private Map<Integer, Deputado> deputados;
     
     public Partido(int numeroDoPartido, String siglaDoPartido) {
@@ -15,6 +19,7 @@ public class Partido {
         this.siglaDoPartido = siglaDoPartido;
         this.quantidadeDeVotosNominais = 0;
         this.quantidadeDeVotosDeLegenda = 0;
+        this.qtdDeputadosEleitos = 0;
         this.deputados = new HashMap<>();
     }
     public Partido() {
@@ -50,6 +55,12 @@ public class Partido {
     public void setQuantidadeDeVotosDeLegenda(int quantidadeDeVotosDeLegenda) {
         this.quantidadeDeVotosDeLegenda = quantidadeDeVotosDeLegenda;
     }
+    public int getQtdDeputadosEleitos() {
+        return qtdDeputadosEleitos;
+    }
+    public void setQtdDeputadosEleitos(int qtdDeputadosEleitos) {
+        this.qtdDeputadosEleitos = qtdDeputadosEleitos;
+    }
 
     public Deputado retornaDeputado(int id){
         return deputados.get(id);
@@ -66,6 +77,10 @@ public class Partido {
     public void adicionaVotosDeLegenda(int valor) {
         this.setQuantidadeDeVotosDeLegenda(this.getQuantidadeDeVotosDeLegenda() + valor);
     }
+    public void adicionaEleito(){
+        this.qtdDeputadosEleitos++;
+    }
+    
     public Deputado deputadoMaisVotado() {
         Deputado deputadoMaisVotado = new Deputado();
         for(Deputado d : deputados.values()){
@@ -89,7 +104,10 @@ public class Partido {
         return siglaDoPartido+" - "+numeroDoPartido+", ";
     }
     public String votosPartido() {
-        return toString()+retornaVotosTotais()+" votos ("+quantidadeDeVotosNominais+" nominais e "+quantidadeDeVotosDeLegenda+" de legenda)";
+        Locale brLocale = Locale.forLanguageTag("pt-BR");
+        NumberFormat nf = NumberFormat.getInstance(brLocale);
+
+        return toString()+retornaVotosTotais()+" votos ("+nf.format(quantidadeDeVotosNominais)+" nominais e "+nf.format(quantidadeDeVotosDeLegenda)+" de legenda), " + qtdDeputadosEleitos + " candidatos eleitos";
     }
     public String maisEMenosVotados() {
         return toString()+deputadoMaisVotado()+" / "+deputadoMenosVotado();

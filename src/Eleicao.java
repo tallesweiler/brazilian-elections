@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -18,6 +19,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Locale;
 import java.util.Map;
 
 public class Eleicao {
@@ -190,6 +192,7 @@ public class Eleicao {
                 qtdFeminino++;
 
             deputadosEleitos.add(novoDeputado);
+            partidoTemp.adicionaEleito();
         };
 
         return novoDeputado;
@@ -431,23 +434,29 @@ public class Eleicao {
     }
     public void imprimeEstatisticas(BufferedWriter arquivo){
         try {
+            Locale brLocale = Locale.forLanguageTag("pt-BR");
+            NumberFormat nf = NumberFormat.getInstance(brLocale);
+            NumberFormat ni = NumberFormat.getInstance(brLocale);
+            nf.setGroupingUsed(true);
+            nf.setMinimumFractionDigits(2);
+            nf.setMaximumFractionDigits(2);
             
             arquivo.append("Eleitos, por faixa etária (na data da eleição):\n");
-            arquivo.append("      Idade < 30: " + idadeMenorQue30 + " (" + (((float)idadeMenorQue30/(float)vagas)*100) + "%)\n");
-            arquivo.append("30 <= Idade < 40: " + idadeMenorQue40 + " (" + (((float)idadeMenorQue40/(float)vagas)*100) + "%)\n");
-            arquivo.append("40 <= Idade < 50: " + idadeMenorQue50 + " (" + (((float)idadeMenorQue50/(float)vagas)*100) + "%)\n");
-            arquivo.append("50 <= Idade < 60: " + idadeMenorQue60 + " (" + (((float)idadeMenorQue60/(float)vagas)*100) + "%)\n");
-            arquivo.append("60 <= Idade     : " + idadeMaiorQue60 + " (" + (((float)idadeMaiorQue60/(float)vagas)*100) + "%)\n");
+            arquivo.append("      Idade < 30: " + ni.format(idadeMenorQue30) + " (" + nf.format(((float)idadeMenorQue30/(float)vagas)*100) + "%)\n");
+            arquivo.append("30 <= Idade < 40: " + ni.format(idadeMenorQue40) + " (" + nf.format(((float)idadeMenorQue40/(float)vagas)*100) + "%)\n");
+            arquivo.append("40 <= Idade < 50: " + ni.format(idadeMenorQue50) + " (" + nf.format(((float)idadeMenorQue50/(float)vagas)*100) + "%)\n");
+            arquivo.append("50 <= Idade < 60: " + ni.format(idadeMenorQue60) + " (" + nf.format(((float)idadeMenorQue60/(float)vagas)*100) + "%)\n");
+            arquivo.append("60 <= Idade     : " + ni.format(idadeMaiorQue60) + " (" + nf.format(((float)idadeMaiorQue60/(float)vagas)*100) + "%)\n");
             arquivo.append("\n");
 
             arquivo.append("Eleitos, por gênero:\n");
-            arquivo.append("Feminino:  " + qtdFeminino + " (" + (((float)qtdFeminino/(float)vagas)*100) + "%)\n");
-            arquivo.append("Masculino: " + qtdMasculino + " (" + (((float)qtdMasculino/(float)vagas)*100) + "%)\n");
+            arquivo.append("Feminino:  " + ni.format(qtdFeminino) + " (" + nf.format(((float)qtdFeminino/(float)vagas)*100) + "%)\n");
+            arquivo.append("Masculino: " + ni.format(qtdMasculino) + " (" + nf.format(((float)qtdMasculino/(float)vagas)*100) + "%)\n");
             arquivo.append("\n");
 
-            arquivo.append("Total de votos válidos:    " + qtdVotosValidos + "\n");
-            arquivo.append("Total de votos nominais:   " + qtdVotosNominais + " (" + (((float)qtdVotosNominais/(float)qtdVotosValidos)*100) + "%)\n");
-            arquivo.append("Total de votos de legenda: " + qtdVotosDeLegenda + " (" + (((float)qtdVotosDeLegenda/(float)qtdVotosValidos)*100) + "%)\n");
+            arquivo.append("Total de votos válidos:    " + ni.format(qtdVotosValidos) + "\n");
+            arquivo.append("Total de votos nominais:   " + ni.format(qtdVotosNominais) + " (" + nf.format(((float)qtdVotosNominais/(float)qtdVotosValidos)*100) + "%)\n");
+            arquivo.append("Total de votos de legenda: " + ni.format(qtdVotosDeLegenda) + " (" + nf.format(((float)qtdVotosDeLegenda/(float)qtdVotosValidos)*100) + "%)\n");
 
         } catch(IOException e) {
             System.out.println(e);
@@ -457,7 +466,10 @@ public class Eleicao {
     public void imprimeInformacoes(BufferedWriter arquivo) {
         qtdVotosValidos = qtdVotosNominais + qtdVotosDeLegenda;
         try {
-            arquivo.append("Número de vagas: "+vagas+"\n\n");
+            Locale brLocale = Locale.forLanguageTag("pt-BR");
+            NumberFormat ni = NumberFormat.getInstance(brLocale);
+            arquivo.append("Número de vagas: "+ni.format(vagas)+"\n\n");
+
             preencheTodosDeputados();
             preencheTodosPartidos();
             ordenaDeputadosPorQuantidadeDeVotos(deputados);

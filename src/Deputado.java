@@ -1,7 +1,9 @@
 package src;
 
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Locale;
 
 public class Deputado {
     private int cargo;                  // 6 federal 7 estadual
@@ -127,6 +129,9 @@ public class Deputado {
         this.setQuantidadeDeVotos(this.getQuantidadeDeVotos() + valor);
     }
     public String toString() {
-        return nomeNaUrna+" ("+siglaDoPartido+", "+quantidadeDeVotos+" votos)";
+        Locale brLocale = Locale.forLanguageTag("pt-BR");
+        NumberFormat nf = NumberFormat.getInstance(brLocale);
+        
+        return nomeNaUrna+" ("+siglaDoPartido+", "+nf.format(quantidadeDeVotos)+" votos)";
     }
 }
