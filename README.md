@@ -5,4 +5,3 @@ data/votacao_secao_2022
 
 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
 
-"arquivos_de_votacao/votacao_secao_2022_"+sigla+".csv"
