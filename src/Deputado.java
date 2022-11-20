@@ -1,25 +1,20 @@
 package src;
 
-public class Politico {
-    private int cargo; // 6 federal 7 estadual
-    private int numeroDoCandidato; // numero do candidato na urna
-    private String nomeNaUrna; // nome do candidato na urna
-    private int numeroDaFederacao; // numero da federacao, -1 representando candidato em partido isolado(que nao
-                                   // participa de federacao)
-    private String dataDeNascimento;// data de nascimento do candidato
-    private int genero; // 2 masculino 4 feminino
-    private int foiEleito; // 2 ou 3 representam candidato eleito
-    private String tipoDeVoto; // quando for “Válido (legenda)” os votos deste candidato vão para a legenda (e
-                               // devem ser computados para a legenda, mesmo em caso de
-                               // CD_SITUACAO_CANDIDADO_TOT diferente de 2 ou 16)
-    private int situacaoCandidato; // processar apenas aqueles com os valores 2 ou 16 que representam candidatos
-                                   // com candidatura deferida;
-    private int quantidadeDeVotos; // quantidade de votos obtidos
-    private Partido partido;
+public class Deputado {
+    private int cargo;                  // 6 federal 7 estadual
+    private int numeroDoCandidato;      // numero do candidato na urna
+    private String nomeNaUrna;          // nome do candidato na urna
+    private int numeroDaFederacao;      // numero da federacao, -1 representando candidato em partido isolado(que nao participa de federacao)
+    private String dataDeNascimento;    // data de nascimento do candidato
+    private int genero;                 // 2 masculino 4 feminino
+    private int foiEleito;              // 2 ou 3 representam candidato eleito
+    private String tipoDeVoto;          // quando for “Válido (legenda)” os votos deste candidato vão para a legenda (e devem ser computados para a legenda, mesmo em caso de CD_SITUACAO_CANDIDADO_TOT diferente de 2 ou 16)
+    private int situacaoCandidato;      // processar apenas aqueles com os valores 2 ou 16 que representam candidatos com candidatura deferida;
+    private int quantidadeDeVotos;      // quantidade de votos obtidos
+    private int numeroDoPartido;        // número do partido;
+    private String siglaDoPartido;      // sigla do partido;
 
-    public Politico(int cargo, int numeroDoCandidato, String nomeNaUrna, int numeroDoPartido, String siglaDoPartido,
-            int numeroDaFederacao, String dataDeNascimento, int genero, int foiEleito, String tipoDeVoto,
-            int situacaoCandidato) {
+    public Deputado(int cargo, int numeroDoCandidato, String nomeNaUrna, int numeroDoPartido, String siglaDoPartido, int numeroDaFederacao, String dataDeNascimento, int genero, int foiEleito, String tipoDeVoto, int situacaoCandidato) {
         this.cargo = cargo;
         this.numeroDoCandidato = numeroDoCandidato;
         this.nomeNaUrna = nomeNaUrna;
@@ -29,13 +24,11 @@ public class Politico {
         this.foiEleito = foiEleito;
         this.tipoDeVoto = tipoDeVoto;
         this.situacaoCandidato = situacaoCandidato;
+        this.numeroDoPartido = numeroDoPartido;
+        this.siglaDoPartido = siglaDoPartido;
     }
 
-    public Politico(int numeroDoCandidato) {
-        this.numeroDoCandidato = numeroDoCandidato;
-    }
-
-    public Politico() {
+    public Deputado() {
     }
 
     public int getCargo() {
@@ -135,12 +128,10 @@ public class Politico {
     }
 
     public void adicionaVotos(int valor) {
-        setQuantidadeDeVotos(getQuantidadeDeVotos() + valor);
+        this.setQuantidadeDeVotos(this.getQuantidadeDeVotos() + valor);
     }
 
     public String toString() {
-        return cargo + ";" + numeroDoCandidato + ";" + nomeNaUrna + ";" + numeroDoPartido + ";" + siglaDoPartido + ";"
-                + numeroDaFederacao + ";" + dataDeNascimento + ";" + genero + ";" + foiEleito + ";" + tipoDeVoto + ";"
-                + situacaoCandidato + ";" + quantidadeDeVotos;
+        return cargo + ";" + numeroDoCandidato + ";" + nomeNaUrna + ";" + numeroDoPartido + ";" + siglaDoPartido + ";" + numeroDaFederacao + ";" + dataDeNascimento + ";" + genero + ";" + foiEleito + ";" + tipoDeVoto + ";" + situacaoCandidato + ";" + quantidadeDeVotos;
     }
 }
