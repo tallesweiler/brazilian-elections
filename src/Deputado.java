@@ -1,11 +1,13 @@
 package src;
 
+import java.time.LocalDate;
+
 public class Deputado {
     private int cargo;                  // 6 federal 7 estadual
     private int numeroDoCandidato;      // numero do candidato na urna
     private String nomeNaUrna;          // nome do candidato na urna
     private int numeroDaFederacao;      // numero da federacao, -1 representando candidato em partido isolado(que nao participa de federacao)
-    private String dataDeNascimento;    // data de nascimento do candidato
+    private LocalDate dataDeNascimento;    // data de nascimento do candidato
     private int genero;                 // 2 masculino 4 feminino
     private int foiEleito;              // 2 ou 3 representam candidato eleito
     private String tipoDeVoto;          // quando for “Válido (legenda)” os votos deste candidato vão para a legenda (e devem ser computados para a legenda, mesmo em caso de CD_SITUACAO_CANDIDADO_TOT diferente de 2 ou 16)
@@ -14,12 +16,14 @@ public class Deputado {
     private int numeroDoPartido;        // número do partido;
     private String siglaDoPartido;      // sigla do partido;
 
-    public Deputado(int cargo, int numeroDoCandidato, String nomeNaUrna, int numeroDoPartido, String siglaDoPartido, int numeroDaFederacao, String dataDeNascimento, int genero, int foiEleito, String tipoDeVoto, int situacaoCandidato) {
+    public Deputado(int cargo, int numeroDoCandidato, String nomeNaUrna, int numeroDoPartido, String siglaDoPartido, int numeroDaFederacao, int dia, int mes, int ano, int genero, int foiEleito, String tipoDeVoto, int situacaoCandidato) {
         this.cargo = cargo;
         this.numeroDoCandidato = numeroDoCandidato;
         this.nomeNaUrna = nomeNaUrna;
         this.numeroDaFederacao = numeroDaFederacao;
-        this.dataDeNascimento = dataDeNascimento;
+        System.out.println(dia);
+        //this.dataDeNascimento = LocalDate.of(ano, mes, dia);
+        //System.out.println(this.dataDeNascimento);
         this.genero = genero;
         this.foiEleito = foiEleito;
         this.tipoDeVoto = tipoDeVoto;
@@ -55,10 +59,10 @@ public class Deputado {
     public void setNumeroDaFederacao(int numeroDaFederacao) {
         this.numeroDaFederacao = numeroDaFederacao;
     }
-    public String getDataDeNascimento() {
+    public LocalDate getDataDeNascimento() {
         return dataDeNascimento;
     }
-    public void setDataDeNascimento(String dataDeNascimento) {
+    public void setDataDeNascimento(LocalDate dataDeNascimento) {
         this.dataDeNascimento = dataDeNascimento;
     }
     public int getFoiEleito() {

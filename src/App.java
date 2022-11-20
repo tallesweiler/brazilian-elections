@@ -14,8 +14,8 @@ public class App {
             BufferedWriter arquivo = new BufferedWriter(new FileWriter("teste.txt"));
             Scanner scan = new Scanner(System.in);
             String sigla=scan.nextLine();
-            eleicao.preencheDeputados("consulta_cand_2022/consulta_cand_2022_"+sigla+".csv", sigla, 6);
-            eleicao.preencheVotosDeputados("votacao_secao_2022/votacao_secao_2022_"+sigla+".csv", sigla, 6);
+            eleicao.preencheDeputados("data/consulta_cand_2022/consulta_cand_2022_"+sigla+".csv", sigla, 6);
+            eleicao.preencheVotosDeputados("data/votacao_secao_2022/votacao_secao_2022_"+sigla+".csv", sigla, 6);
             eleicao.imprimeInformacoes(arquivo);
             arquivo.close();
             scan.close();

@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDate;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.Collections;
@@ -20,7 +21,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 public class Eleicao {
-    private Map<Integer, Partido> partidos;
+    private Map<Integer, Partido> partidos; // utiliza-se um hashmap para rapido acesso dos deputados na hora de contabilizar cada voto
     private LinkedList<Deputado> deputadosEleitos;
     private LinkedList<Deputado> deputados;
     private LinkedList<Partido> partidoss;
@@ -72,7 +73,9 @@ public class Eleicao {
         int NR_PARTIDO;                     // número do partido;
         String SG_PARTIDO;                  // sigla do partido;
         int NR_FEDERACAO;                   // número da federação, com -1 representando candidato em partido isolado (que não participa de federação)
-        String DT_NASCIMENTO;               // data de nascimento do candidato no formato dd/mm/aaaa;
+        int DIA;                            // dia
+        int MES = 0;                            // mes
+        int ANO = 0;                            // ano
         int CD_GENERO;                      // 2 representando masculino e 4 representando feminino;
         int CD_SIT_TOT_TURNO;               // 2 ou 3 representando candidato eleito;
         String NM_TIPO_DESTINACAO_VOTOS;    // quando for “Válido (legenda)” os votos deste candidato vão para a legenda (e devem ser computados para a legenda, mesmo em caso de CD_SITUACAO_CANDIDADO_TOT diferente de 2 ou 16)
@@ -116,7 +119,10 @@ public class Eleicao {
         passaDireto(12, scan);
         scan.useDelimiter("\"");
         passaDireto(1, scan);
-        DT_NASCIMENTO=scan.next();
+        DIA = scan.nextInt();
+        //MES = scan.nextInt();
+        //ANO = scan.nextInt();
+        //DT_NASCIMENTO=scan.next();
         scan.useDelimiter(";");
         passaDireto(3, scan);
         scan.useDelimiter("\"");
@@ -143,7 +149,7 @@ public class Eleicao {
             return null;
         }
         */
-        Deputado novoDeputado = new Deputado(CD_CARGO, NR_CANDIDATO, NM_URNA_CANDIDATO, NR_PARTIDO, SG_PARTIDO, NR_FEDERACAO, DT_NASCIMENTO, CD_GENERO, CD_SIT_TOT_TURNO, NM_TIPO_DESTINACAO_VOTOS, CD_SITUACAO_CANDIDATO_TOT);
+        Deputado novoDeputado = new Deputado(CD_CARGO, NR_CANDIDATO, NM_URNA_CANDIDATO, NR_PARTIDO, SG_PARTIDO, NR_FEDERACAO, DIA, MES, ANO, CD_GENERO, CD_SIT_TOT_TURNO, NM_TIPO_DESTINACAO_VOTOS, CD_SITUACAO_CANDIDATO_TOT);
 
         if(CD_SIT_TOT_TURNO == 2 || CD_SIT_TOT_TURNO == 3){
             vagas++;
