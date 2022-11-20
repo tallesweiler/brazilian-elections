@@ -268,7 +268,7 @@ public class Eleicao {
             } 
         } );
     }
-    public void ordenaDeputadosPorPartidos(LinkedList<Partido> partidoss){
+    public void ordenaPartidosPorDeputdoMaisVotado(LinkedList<Partido> partidoss){
         Collections.sort(partidoss, new Comparator<Partido>() {
             @Override
             public int compare(Partido p1, Partido p2) { 
@@ -297,9 +297,25 @@ public class Eleicao {
             System.out.println(e);
         }
     }
+    public void imprimeMaisVotados(BufferedWriter arquivo){
+        try {
+            int i=1;
+            arquivo.append("Candidatos mais votados (em ordem decrescente de votação e respeitando número de vagas):\n");
+            for(Deputado d: deputados){
+                arquivo.append(i+" - "+d+"\n");
+                i++;
+                if (i>vagas)
+                    break;
+            }
+            arquivo.append("\n");
+        } catch(IOException e) {
+            System.out.println(e);
+        }
+    }
     public void imprimeVotosDosPartidos(BufferedWriter arquivo) {
         try {
             int i=1;
+            arquivo.append("Votação dos partidos e número de candidatos eleitos:\n");
             for (Partido p : partidoss) {
                 arquivo.append(i+" - "+p.votosPartido()+"\n");
                 i++;
@@ -312,6 +328,7 @@ public class Eleicao {
     public void imprimeMaisEMenosVotados(BufferedWriter arquivo){
         try {
             int i=1;
+            arquivo.append("Primeiro e último colocados de cada partido:\n");
             for (Partido p : partidoss) {
                 arquivo.append(i+" - "+p.maisEMenosVotados()+"\n");
                 i++;
@@ -331,8 +348,9 @@ public class Eleicao {
             ordenaPartidosPorQuantidadeDeVotos(partidoss);
             arquivo.append("Número de vagas: "+deputadosEleitos.size()+"\n\n");
             imprimeEleitos(arquivo);
+            imprimeMaisVotados(arquivo);
             imprimeVotosDosPartidos(arquivo);
-            ordenaDeputadosPorPartidos(partidoss);
+            ordenaPartidosPorDeputdoMaisVotado(partidoss);
             imprimeMaisEMenosVotados(arquivo);
         } catch(IOException e) {
             System.out.println(e);
