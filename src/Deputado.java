@@ -134,4 +134,10 @@ public class Deputado {
         
         return nomeNaUrna+" ("+siglaDoPartido+", "+nf.format(quantidadeDeVotos)+" votos)";
     }
+    public String maisEMenosVotado() {
+        Locale brLocale = Locale.forLanguageTag("pt-BR");
+        NumberFormat nf = NumberFormat.getInstance(brLocale);
+        
+        return nomeNaUrna+" ("+numeroDoCandidato+", "+nf.format(quantidadeDeVotos)+" votos)";
+    }
 }

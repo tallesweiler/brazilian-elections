@@ -11,7 +11,6 @@ public class Partido {
     private int quantidadeDeVotosNominais;
     private int quantidadeDeVotosDeLegenda;
     private int qtdDeputadosEleitos;
-
     private Map<Integer, Deputado> deputados;
     
     public Partido(int numeroDoPartido, String siglaDoPartido) {
@@ -22,8 +21,7 @@ public class Partido {
         this.qtdDeputadosEleitos = 0;
         this.deputados = new HashMap<>();
     }
-    public Partido() {
-    }
+    public Partido() {}
     
     public int getNumeroDoPartido() {
         return numeroDoPartido;
@@ -107,9 +105,28 @@ public class Partido {
         Locale brLocale = Locale.forLanguageTag("pt-BR");
         NumberFormat nf = NumberFormat.getInstance(brLocale);
 
-        return toString()+retornaVotosTotais()+" votos ("+nf.format(quantidadeDeVotosNominais)+" nominais e "+nf.format(quantidadeDeVotosDeLegenda)+" de legenda), " + qtdDeputadosEleitos + " candidatos eleitos";
+        String string=toString();
+
+        int votosTotais=retornaVotosTotais();
+
+        if ((votosTotais)>1)
+            string+=nf.format(votosTotais)+" votos ("+nf.format(quantidadeDeVotosNominais);
+        else 
+            string+=nf.format(votosTotais)+" voto ("+nf.format(quantidadeDeVotosNominais);
+
+        if (quantidadeDeVotosNominais>1)
+            string+=" nominais e ";
+        else 
+            string+=" nominal e ";
+
+        if (qtdDeputadosEleitos>1)
+            string+=nf.format(quantidadeDeVotosDeLegenda)+" de legenda), " + qtdDeputadosEleitos + " candidatos eleitos";
+        else
+            string+=nf.format(quantidadeDeVotosDeLegenda)+" de legenda), " + qtdDeputadosEleitos + " candidato eleito";
+
+        return string;
     }
     public String maisEMenosVotados() {
-        return toString()+deputadoMaisVotado()+" / "+deputadoMenosVotado();
+        return toString()+deputadoMaisVotado().maisEMenosVotado()+" / "+deputadoMenosVotado().maisEMenosVotado();
     }
 }
