@@ -1,9 +1,11 @@
 package src;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 //import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 //import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -21,23 +23,26 @@ public class Eleicao {
     private Map<Integer, Partido> partidos;
     private LinkedList<Deputado> deputadosEleitos;
     private LinkedList<Deputado> deputados;
+    private LinkedList<Partido> partidoss;
     private int vagas;
 
+    
     public Eleicao(){
         this.partidos = new HashMap<>();
         this.deputadosEleitos = new LinkedList<>();
         this.deputados = new LinkedList<>();
+        this.partidoss = new LinkedList<>();
         this.vagas = 0;
     }
-
+    
     public void preencheDeputados(String nomeArquivo, String sigla, int cargo) throws FileNotFoundException, IOException {
         try(FileInputStream in = new FileInputStream(nomeArquivo);
-            Reader r = new InputStreamReader(in, "ISO-8859-1");
-            BufferedReader br = new BufferedReader(r);) 
+        Reader r = new InputStreamReader(in, "ISO-8859-1");
+        BufferedReader br = new BufferedReader(r);) 
         {
             String linha=br.readLine();
             linha=br.readLine();
-
+            
             while(linha!=null) {
                 try (Scanner scan = new Scanner(linha)) {
                     Deputado novoDeputado = preencheDeputado(scan, cargo);
@@ -60,7 +65,6 @@ public class Eleicao {
             System.out.println(e);
         }
     }
-
     private Deputado preencheDeputado(Scanner scan, int cargo) {
         int CD_CARGO;                       // 6 para deputado federal e 7 para deputado estadual;
         int NR_CANDIDATO;                   // número do candidato;
@@ -148,7 +152,6 @@ public class Eleicao {
 
         return novoDeputado;
     }
-
     public void preencheVotosDeputados(String nomeArquivo, String sigla, int cargo) throws FileNotFoundException, IOException {
         try(FileInputStream in = new FileInputStream(nomeArquivo);
             Reader r = new InputStreamReader(in, "ISO-8859-1");
@@ -171,7 +174,6 @@ public class Eleicao {
             System.out.println(e);
         }
     }
-
     private void preencheVotosDeputado(Scanner scan, int cargo) {
         int CD_CARGO;    //6 para deputado federal e 7 para deputado estadual;
         int NR_VOTAVEL;  //o número do candidato no caso de voto nominal ou o número do partido se for voto na legenda. Os números 95, 96, 97, 98 representam casos de votos em branco, nulos ou anulados, e, como só estamos nos concentrando nos votos válidos, linhas com esses números devem ser ignoradas. Atenção, pois há casos em que NR_VOTAVEL é um número de candidato, porém este candidato tem seus votos nominais redirecionados para a legenda como indicado acima para NM_TIPO_DESTINACAO_VOTOS no arquivo de candidatos igual a “Válido (legenda)”
@@ -232,7 +234,6 @@ public class Eleicao {
             partidoTemp.adicionaVotosDeLegenda(QT_VOTOS);
         }
     }
-
     private void passaDireto(int i, Scanner scan) {
         for (int aux=0;aux<i;aux++) {
             scan.next();
@@ -246,12 +247,32 @@ public class Eleicao {
             }
         }
     }
-
-    public void ordenaDeputadosPorQuantidadeDeVotos(LinkedList<Deputado> deputados, int ordem){
+    public void preencheTodosPartidos(){
+        for(Partido p : partidos.values()){
+            partidoss.add(p);
+        }
+    }
+    public void ordenaDeputadosPorQuantidadeDeVotos(LinkedList<Deputado> deputados){
         Collections.sort(deputados, new Comparator<Deputado>() {
             @Override
             public int compare(Deputado d1, Deputado d2) { 
                 return d2.getQuantidadeDeVotos() - d1.getQuantidadeDeVotos(); 
+            } 
+        } );
+    }
+    public void ordenaPartidosPorQuantidadeDeVotos(LinkedList<Partido> partidos){
+        Collections.sort(partidos, new Comparator<Partido>() {
+            @Override
+            public int compare(Partido p1, Partido p2) { 
+                return p2.retornaVotosTotais() - p1.retornaVotosTotais(); 
+            } 
+        } );
+    }
+    public void ordenaDeputadosPorPartidos(LinkedList<Partido> partidoss){
+        Collections.sort(partidoss, new Comparator<Partido>() {
+            @Override
+            public int compare(Partido p1, Partido p2) { 
+                return p2.deputadoMaisVotado().getQuantidadeDeVotos() - p1.deputadoMaisVotado().getQuantidadeDeVotos(); 
             } 
         } );
     }
@@ -263,10 +284,58 @@ public class Eleicao {
             System.out.println();
         }
     }
-
-    public void imprimeEleitos(){
-        for(Deputado d: deputadosEleitos){
-            System.out.println(d);
+    public void imprimeEleitos(BufferedWriter arquivo){
+        try {
+            int i=1;
+            arquivo.append("Deputados federais eleitos:\n");
+            for(Deputado d: deputadosEleitos){
+                arquivo.append(i+" - "+d+"\n");
+                i++;
+            }
+            arquivo.append("\n");
+        } catch(IOException e) {
+            System.out.println(e);
+        }
+    }
+    public void imprimeVotosDosPartidos(BufferedWriter arquivo) {
+        try {
+            int i=1;
+            for (Partido p : partidoss) {
+                arquivo.append(i+" - "+p.votosPartido()+"\n");
+                i++;
+            }
+            arquivo.append("\n");
+        } catch(IOException e) {
+            System.out.println(e);
+        }
+    }
+    public void imprimeMaisEMenosVotados(BufferedWriter arquivo){
+        try {
+            int i=1;
+            for (Partido p : partidoss) {
+                arquivo.append(i+" - "+p.maisEMenosVotados()+"\n");
+                i++;
+            }
+            arquivo.append("\n");
+        } catch(IOException e) {
+            System.out.println(e);
+        }
+    }
+    
+    public void imprimeInformacoes(BufferedWriter arquivo) {
+        try {
+            preencheTodosDeputados();
+            preencheTodosPartidos();
+            ordenaDeputadosPorQuantidadeDeVotos(deputados);
+            ordenaDeputadosPorQuantidadeDeVotos(deputadosEleitos);
+            ordenaPartidosPorQuantidadeDeVotos(partidoss);
+            arquivo.append("Número de vagas: "+deputadosEleitos.size()+"\n\n");
+            imprimeEleitos(arquivo);
+            imprimeVotosDosPartidos(arquivo);
+            ordenaDeputadosPorPartidos(partidoss);
+            imprimeMaisEMenosVotados(arquivo);
+        } catch(IOException e) {
+            System.out.println(e);
         }
     }
 }

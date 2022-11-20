@@ -27,109 +27,87 @@ public class Deputado {
         this.numeroDoPartido = numeroDoPartido;
         this.siglaDoPartido = siglaDoPartido;
     }
-    public Deputado(){}
+    public Deputado(){
+        this.quantidadeDeVotos=-1;
+    }
 
     public int getCargo() {
         return cargo;
     }
-
     public void setCargo(int cargo) {
         this.cargo = cargo;
     }
-
     public String getNomeNaUrna() {
         return nomeNaUrna;
     }
-
     public void setNomeNaUrna(String nomeNaUrna) {
         this.nomeNaUrna = nomeNaUrna;
     }
-
     public int getNumeroDoCandidato() {
         return numeroDoCandidato;
     }
-
     public void setNumeroDoCandidato(int numeroDoCandidato) {
         this.numeroDoCandidato = numeroDoCandidato;
     }
-
     public int getNumeroDaFederacao() {
         return numeroDaFederacao;
     }
-
     public void setNumeroDaFederacao(int numeroDaFederacao) {
         this.numeroDaFederacao = numeroDaFederacao;
     }
-
     public String getDataDeNascimento() {
         return dataDeNascimento;
     }
-
     public void setDataDeNascimento(String dataDeNascimento) {
         this.dataDeNascimento = dataDeNascimento;
     }
-
     public int getFoiEleito() {
         return foiEleito;
     }
-
     public void setFoiEleito(int foiEleito) {
         this.foiEleito = foiEleito;
     }
-
     public int getGenero() {
         return genero;
     }
-
     public void setGenero(int genero) {
         this.genero = genero;
     }
-
     public int getQuantidadeDeVotos() {
         return quantidadeDeVotos;
     }
-
     public void setQuantidadeDeVotos(int quantidadeDeVotos) {
         this.quantidadeDeVotos = quantidadeDeVotos;
     }
-
     public int getNumeroDoPartido() {
         return numeroDoPartido;
     }
-
     public void setNumeroDoPartido(int numeroDoPartido) {
         this.numeroDoPartido = numeroDoPartido;
     }
-
     public String getSiglaDoPartido() {
         return siglaDoPartido;
     }
-
     public void setSiglaDoPartido(String siglaDoPartido) {
         this.siglaDoPartido = siglaDoPartido;
     }
-
     public int getSituacaoCandidato() {
         return situacaoCandidato;
     }
-
     public void setSituacaoCandidato(int situacaoCandidato) {
         this.situacaoCandidato = situacaoCandidato;
     }
-
     public String getTipoDeVoto() {
         return tipoDeVoto;
     }
-
     public void setTipoDeVoto(String tipoDeVoto) {
         this.tipoDeVoto = tipoDeVoto;
     }
-
     public void adicionaVotos(int valor) {
         this.setQuantidadeDeVotos(this.getQuantidadeDeVotos() + valor);
     }
 
     public String toString() {
-        return cargo + ";" + numeroDoCandidato + ";" + nomeNaUrna + ";" + numeroDoPartido + ";" + siglaDoPartido + ";" + numeroDaFederacao + ";" + dataDeNascimento + ";" + genero + ";" + foiEleito + ";" + tipoDeVoto + ";" + situacaoCandidato + ";" + quantidadeDeVotos;
+        return nomeNaUrna+" ("+siglaDoPartido+", "+quantidadeDeVotos+" votos)";
     }
 }

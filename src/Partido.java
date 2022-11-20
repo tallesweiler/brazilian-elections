@@ -1,7 +1,6 @@
 package src;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 public class Partido {
@@ -21,25 +20,6 @@ public class Partido {
     public Partido() {
     }
     
-    public Deputado getDeputadoMaisVotado() {
-        int i = 0;
-        Deputado deputadoMaisVotado = new Deputado();
-        for(Deputado d : deputados.values()){
-            if(i == 0){
-                deputadoMaisVotado = d;
-            }
-            if(d.getQuantidadeDeVotos() > deputadoMaisVotado.getQuantidadeDeVotos()){
-                deputadoMaisVotado = d;
-            }
-            i++;
-        }
-
-        return deputadoMaisVotado;
-        
-    }
-    public Deputado getDeputadoMenosVotado() {
-        return deputadoMenosVotado;
-    }
     public int getNumeroDoPartido() {
         return numeroDoPartido;
     }
@@ -58,12 +38,6 @@ public class Partido {
     public void setDeputados(Map<Integer, Deputado> deputados){
         this.deputados = deputados;
     }
-    public LinkedList<Deputado> getDeputadosOrdenados() {
-        return deputadosOrdenados;
-    }
-    public void setDeputadosOrdenados(LinkedList<Deputado> deputadosOrdenados) {
-        this.deputadosOrdenados = deputadosOrdenados;
-    }
     public int getQuantidadeDeVotosNominais() {
         return quantidadeDeVotosNominais;
     }
@@ -80,6 +54,9 @@ public class Partido {
     public Deputado retornaDeputado(int id){
         return deputados.get(id);
     }
+    public int retornaVotosTotais() {
+        return quantidadeDeVotosDeLegenda+quantidadeDeVotosNominais;
+    }
     public void adicionaDeputado(int id, Deputado deputado) {
         this.deputados.put(id, deputado);
     }
@@ -89,14 +66,32 @@ public class Partido {
     public void adicionaVotosDeLegenda(int valor) {
         this.setQuantidadeDeVotosDeLegenda(this.getQuantidadeDeVotosDeLegenda() + valor);
     }
+    public Deputado deputadoMaisVotado() {
+        Deputado deputadoMaisVotado = new Deputado();
+        for(Deputado d : deputados.values()){
+            if(d.getQuantidadeDeVotos() > deputadoMaisVotado.getQuantidadeDeVotos()){
+                deputadoMaisVotado = d;
+            }
+        }  
+        return deputadoMaisVotado;
+    }
+    public Deputado deputadoMenosVotado() {
+        Deputado deputadoMenosVotado = deputadoMaisVotado();
+        for(Deputado d : deputados.values()){
+            if(d.getQuantidadeDeVotos() < deputadoMenosVotado.getQuantidadeDeVotos()){
+                deputadoMenosVotado = d;
+            }
+        }  
+        return deputadoMenosVotado;
+    }
 
     public String toString(){
-        String string;
-        string = siglaDoPartido + "(" + (quantidadeDeVotosNominais + quantidadeDeVotosDeLegenda) + ")\n";
-        for(Deputado d : deputados.values()){
-            string += d + "\n";
-        }
-
-        return string;
+        return siglaDoPartido+" - "+numeroDoPartido+", ";
+    }
+    public String votosPartido() {
+        return toString()+retornaVotosTotais()+" votos ("+quantidadeDeVotosNominais+" nominais e "+quantidadeDeVotosDeLegenda+" de legenda)";
+    }
+    public String maisEMenosVotados() {
+        return toString()+deputadoMaisVotado()+" / "+deputadoMenosVotado();
     }
 }
