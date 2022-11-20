@@ -16,14 +16,13 @@ public class Deputado {
     private int numeroDoPartido;        // número do partido;
     private String siglaDoPartido;      // sigla do partido;
 
-    public Deputado(int cargo, int numeroDoCandidato, String nomeNaUrna, int numeroDoPartido, String siglaDoPartido, int numeroDaFederacao, int dia, int mes, int ano, int genero, int foiEleito, String tipoDeVoto, int situacaoCandidato) {
+    public Deputado(int cargo, int numeroDoCandidato, String nomeNaUrna, int numeroDoPartido, String siglaDoPartido, int numeroDaFederacao, String dia, String mes, String ano, int genero, int foiEleito, String tipoDeVoto, int situacaoCandidato) {
         this.cargo = cargo;
         this.numeroDoCandidato = numeroDoCandidato;
         this.nomeNaUrna = nomeNaUrna;
         this.numeroDaFederacao = numeroDaFederacao;
-        System.out.println(dia);
-        //this.dataDeNascimento = LocalDate.of(ano, mes, dia);
-        //System.out.println(this.dataDeNascimento);
+        this.dataDeNascimento=LocalDate.of(Integer.parseInt(ano), Integer.parseInt(mes), Integer.parseInt(dia));
+        System.out.println(dataDeNascimento);
         this.genero = genero;
         this.foiEleito = foiEleito;
         this.tipoDeVoto = tipoDeVoto;
@@ -107,10 +106,10 @@ public class Deputado {
     public void setTipoDeVoto(String tipoDeVoto) {
         this.tipoDeVoto = tipoDeVoto;
     }
+
     public void adicionaVotos(int valor) {
         this.setQuantidadeDeVotos(this.getQuantidadeDeVotos() + valor);
     }
-
     public String toString() {
         return nomeNaUrna+" ("+siglaDoPartido+", "+quantidadeDeVotos+" votos)";
     }
