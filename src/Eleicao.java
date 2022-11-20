@@ -341,12 +341,12 @@ public class Eleicao {
     
     public void imprimeInformacoes(BufferedWriter arquivo) {
         try {
+            arquivo.append("Número de vagas: "+vagas+"\n\n");
             preencheTodosDeputados();
             preencheTodosPartidos();
             ordenaDeputadosPorQuantidadeDeVotos(deputados);
             ordenaDeputadosPorQuantidadeDeVotos(deputadosEleitos);
             ordenaPartidosPorQuantidadeDeVotos(partidoss);
-            arquivo.append("Número de vagas: "+deputadosEleitos.size()+"\n\n");
             imprimeEleitos(arquivo);
             imprimeMaisVotados(arquivo);
             imprimeVotosDosPartidos(arquivo);
