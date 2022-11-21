@@ -22,126 +22,130 @@ public class Deputado {
     private LocalDate dataDeNascimento; // data de nascimento do candidato
 
     public Deputado(int cargo, int numeroDoCandidato, String nomeNaUrna, int numeroDoPartido, String siglaDoPartido, int numeroDaFederacao, String dia, String mes, String ano, int genero, int foiEleito, String tipoDeVoto, int situacaoCandidato) {
-        this.cargo = cargo;
-        this.numeroDoCandidato = numeroDoCandidato;
-        this.nomeNaUrna = nomeNaUrna;
-        this.numeroDaFederacao = numeroDaFederacao;
-        this.dataDeNascimento = LocalDate.of(Integer.parseInt(ano), Integer.parseInt(mes), Integer.parseInt(dia));
-        this.idade = Period.between(dataDeNascimento, LocalDate.of(2022, 10, 2)).getYears();
-        this.idadeEmDias = Period.between(dataDeNascimento, LocalDate.of(2022, 10, 2)).getDays();
-        this.genero = genero;
-        this.foiEleito = foiEleito;
-        this.tipoDeVoto = tipoDeVoto;
-        this.situacaoCandidato = situacaoCandidato;
-        this.numeroDoPartido = numeroDoPartido;
-        this.siglaDoPartido = siglaDoPartido;
+        this.cargo=cargo;
+        this.genero=genero;
+        this.foiEleito=foiEleito;
+        this.nomeNaUrna=nomeNaUrna;
+        this.tipoDeVoto=tipoDeVoto;
+        this.siglaDoPartido=siglaDoPartido;
+        this.numeroDoPartido=numeroDoPartido;
+        this.situacaoCandidato=situacaoCandidato;
+        this.numeroDaFederacao=numeroDaFederacao;
+        this.numeroDoCandidato=numeroDoCandidato;
+        this.dataDeNascimento=LocalDate.of(Integer.parseInt(ano), Integer.parseInt(mes), Integer.parseInt(dia));
+        this.idadeEmDias=Period.between(dataDeNascimento, LocalDate.of(2022, 10, 2)).getDays();
+        this.idade=Period.between(dataDeNascimento, LocalDate.of(2022, 10, 2)).getYears();
     }
     public Deputado(){
         this.quantidadeDeVotos=-1;
     }
-
+    
     public int getCargo() {
         return cargo;
     }
     public void setCargo(int cargo) {
-        this.cargo = cargo;
-    }
-    public String getNomeNaUrna() {
-        return nomeNaUrna;
-    }
-    public void setNomeNaUrna(String nomeNaUrna) {
-        this.nomeNaUrna = nomeNaUrna;
-    }
-    public int getNumeroDoCandidato() {
-        return numeroDoCandidato;
-    }
-    public void setNumeroDoCandidato(int numeroDoCandidato) {
-        this.numeroDoCandidato = numeroDoCandidato;
-    }
-    public int getNumeroDaFederacao() {
-        return numeroDaFederacao;
-    }
-    public void setNumeroDaFederacao(int numeroDaFederacao) {
-        this.numeroDaFederacao = numeroDaFederacao;
-    }
-    public LocalDate getDataDeNascimento() {
-        return dataDeNascimento;
-    }
-    public void setDataDeNascimento(LocalDate dataDeNascimento) {
-        this.dataDeNascimento = dataDeNascimento;
-    }
-    public int getFoiEleito() {
-        return foiEleito;
-    }
-    public void setFoiEleito(int foiEleito) {
-        this.foiEleito = foiEleito;
-    }
-    public int getGenero() {
-        return genero;
-    }
-    public void setGenero(int genero) {
-        this.genero = genero;
-    }
-    public int getQuantidadeDeVotos() {
-        return quantidadeDeVotos;
-    }
-    public void setQuantidadeDeVotos(int quantidadeDeVotos) {
-        this.quantidadeDeVotos = quantidadeDeVotos;
-    }
-    public int getNumeroDoPartido() {
-        return numeroDoPartido;
-    }
-    public void setNumeroDoPartido(int numeroDoPartido) {
-        this.numeroDoPartido = numeroDoPartido;
-    }
-    public String getSiglaDoPartido() {
-        return siglaDoPartido;
-    }
-    public void setSiglaDoPartido(String siglaDoPartido) {
-        this.siglaDoPartido = siglaDoPartido;
-    }
-    public int getSituacaoCandidato() {
-        return situacaoCandidato;
-    }
-    public void setSituacaoCandidato(int situacaoCandidato) {
-        this.situacaoCandidato = situacaoCandidato;
-    }
-    public String getTipoDeVoto() {
-        return tipoDeVoto;
-    }
-    public void setTipoDeVoto(String tipoDeVoto) {
-        this.tipoDeVoto = tipoDeVoto;
+        this.cargo=cargo;
     }
     public int getIdade() {
         return idade;
     }
     public void setIdade(int idade) {
-        this.idade = idade;
+        this.idade=idade;
+    }
+    public int getGenero() {
+        return genero;
+    }
+    public void setGenero(int genero) {
+        this.genero=genero;
+    }
+    public int getFoiEleito() {
+        return foiEleito;
+    }
+    public void setFoiEleito(int foiEleito) {
+        this.foiEleito=foiEleito;
     }
     public int getIdadeEmDias() {
         return idadeEmDias;
     }
     public void setIdadeEmDias(int idadeEmDias) {
-        this.idadeEmDias = idadeEmDias;
+        this.idadeEmDias=idadeEmDias;
     }
+    public int getNumeroDoPartido() {
+        return numeroDoPartido;
+    }
+    public void setNumeroDoPartido(int numeroDoPartido) {
+        this.numeroDoPartido=numeroDoPartido;
+    }
+    public int getNumeroDoCandidato() {
+        return numeroDoCandidato;
+    }
+    public void setNumeroDoCandidato(int numeroDoCandidato) {
+        this.numeroDoCandidato=numeroDoCandidato;
+    }
+    public int getNumeroDaFederacao() {
+        return numeroDaFederacao;
+    }
+    public void setNumeroDaFederacao(int numeroDaFederacao) {
+        this.numeroDaFederacao=numeroDaFederacao;
+    }
+    public int getQuantidadeDeVotos() {
+        return quantidadeDeVotos;
+    }
+    public void setQuantidadeDeVotos(int quantidadeDeVotos) {
+        this.quantidadeDeVotos=quantidadeDeVotos;
+    }
+    public int getSituacaoCandidato() {
+        return situacaoCandidato;
+    }
+    public void setSituacaoCandidato(int situacaoCandidato) {
+        this.situacaoCandidato=situacaoCandidato;
+    }
+    public String getNomeNaUrna() {
+        return nomeNaUrna;
+    }
+    public void setNomeNaUrna(String nomeNaUrna) {
+        this.nomeNaUrna=nomeNaUrna;
+    }
+    public String getTipoDeVoto() {
+        return tipoDeVoto;
+    }
+    public void setTipoDeVoto(String tipoDeVoto) {
+        this.tipoDeVoto=tipoDeVoto;
+    }
+    public String getSiglaDoPartido() {
+        return siglaDoPartido;
+    }
+    public void setSiglaDoPartido(String siglaDoPartido) {
+        this.siglaDoPartido=siglaDoPartido;
+    }
+    public LocalDate getDataDeNascimento() {
+        return dataDeNascimento;
+    }
+    public void setDataDeNascimento(LocalDate dataDeNascimento) {
+        this.dataDeNascimento=dataDeNascimento;
+    }
+    
+   
 
     public void adicionaVotos(int valor) {
-        this.setQuantidadeDeVotos(this.getQuantidadeDeVotos() + valor);
+        this.setQuantidadeDeVotos(this.getQuantidadeDeVotos()+valor);
     }
     public String toString() {
-        Locale brLocale = Locale.forLanguageTag("pt-BR");
-        NumberFormat nf = NumberFormat.getInstance(brLocale);
+        Locale brLocale=Locale.forLanguageTag("pt-BR");
+        NumberFormat nf=NumberFormat.getInstance(brLocale);
         
         if(quantidadeDeVotos > 1)
             return nomeNaUrna+" ("+siglaDoPartido+", "+nf.format(quantidadeDeVotos)+" votos)";
-        return nomeNaUrna+" ("+siglaDoPartido+", "+nf.format(quantidadeDeVotos)+" voto)";
+        else
+            return nomeNaUrna+" ("+siglaDoPartido+", "+nf.format(quantidadeDeVotos)+" voto)";
     }
     public String maisEMenosVotado() {
-        Locale brLocale = Locale.forLanguageTag("pt-BR");
-        NumberFormat nf = NumberFormat.getInstance(brLocale);
+        Locale brLocale=Locale.forLanguageTag("pt-BR");
+        NumberFormat nf=NumberFormat.getInstance(brLocale);
         
         if(quantidadeDeVotos > 1)
             return nomeNaUrna+" ("+numeroDoCandidato+", "+nf.format(quantidadeDeVotos)+" votos)";
-        return nomeNaUrna+" ("+numeroDoCandidato+", "+nf.format(quantidadeDeVotos)+" voto)";
+        else 
+            return nomeNaUrna+" ("+numeroDoCandidato+", "+nf.format(quantidadeDeVotos)+" voto)";
     }
 }
