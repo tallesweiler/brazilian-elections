@@ -7,19 +7,19 @@ import java.util.Locale;
 
 public class Deputado {
     private int cargo;                  // 6 federal 7 estadual
-    private int numeroDoCandidato;      // numero do candidato na urna
-    private String nomeNaUrna;          // nome do candidato na urna
-    private int numeroDaFederacao;      // numero da federacao, -1 representando candidato em partido isolado(que nao participa de federacao)
-    private LocalDate dataDeNascimento; // data de nascimento do candidato
     private int idade;                  // idade do candidato
-    private int idadeEmDias;            // idade do candidato para fins de comparação
     private int genero;                 // 2 masculino 4 feminino
     private int foiEleito;              // 2 ou 3 representam candidato eleito
-    private String tipoDeVoto;          // quando for “Válido (legenda)” os votos deste candidato vão para a legenda (e devem ser computados para a legenda, mesmo em caso de CD_SITUACAO_CANDIDADO_TOT diferente de 2 ou 16)
-    private int situacaoCandidato;      // processar apenas aqueles com os valores 2 ou 16 que representam candidatos com candidatura deferida;
-    private int quantidadeDeVotos;      // quantidade de votos obtidos
+    private int idadeEmDias;            // idade do candidato para fins de comparação
     private int numeroDoPartido;        // número do partido;
+    private int numeroDoCandidato;      // numero do candidato na urna
+    private int numeroDaFederacao;      // numero da federacao, -1 representando candidato em partido isolado(que nao participa de federacao)
+    private int quantidadeDeVotos;      // quantidade de votos obtidos
+    private int situacaoCandidato;      // processar apenas aqueles com os valores 2 ou 16 que representam candidatos com candidatura deferida;
+    private String nomeNaUrna;          // nome do candidato na urna
+    private String tipoDeVoto;          // quando for “Válido (legenda)” os votos deste candidato vão para a legenda (e devem ser computados para a legenda, mesmo em caso de CD_SITUACAO_CANDIDADO_TOT diferente de 2 ou 16)
     private String siglaDoPartido;      // sigla do partido;
+    private LocalDate dataDeNascimento; // data de nascimento do candidato
 
     public Deputado(int cargo, int numeroDoCandidato, String nomeNaUrna, int numeroDoPartido, String siglaDoPartido, int numeroDaFederacao, String dia, String mes, String ano, int genero, int foiEleito, String tipoDeVoto, int situacaoCandidato) {
         this.cargo = cargo;

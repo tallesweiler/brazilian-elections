@@ -6,11 +6,11 @@ import java.util.Locale;
 import java.util.Map;
 
 public class Partido {
-    private int numeroDoPartido; // número do partido;
-    private String siglaDoPartido; // sigla do partido;
+    private int numeroDoPartido;
+    private int qtdDeputadosEleitos;
     private int quantidadeDeVotosNominais;
     private int quantidadeDeVotosDeLegenda;
-    private int qtdDeputadosEleitos;
+    private String siglaDoPartido;
     private Map<Integer, Deputado> deputados;
     
     public Partido(int numeroDoPartido, String siglaDoPartido) {
