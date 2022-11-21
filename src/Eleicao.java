@@ -156,18 +156,19 @@ public class Eleicao {
         passaDireto(1, scan);
         CD_SITUACAO_CANDIDATO_TOT=scan.nextInt();
         scan.nextLine();
-        /*
-        if (CD_SITUACAO_CANDIDATO_TOT!=2 && CD_SITUACAO_CANDIDATO_TOT!=16) {
-            return null;
-        }
-        */
+
         Partido partidoTemp = partidos.get(NR_PARTIDO);
         if(partidoTemp == null){
             partidos.put(NR_PARTIDO, new Partido(NR_PARTIDO, SG_PARTIDO));
+            partidoTemp = partidos.get(NR_PARTIDO);
         }
         if (CD_CARGO != cargo) {
             return null;
         }
+        if (CD_SITUACAO_CANDIDATO_TOT!=2 && CD_SITUACAO_CANDIDATO_TOT!=16) {
+            return null;
+        }
+
         String[] data=DT_NASCIMENTO.split("/");
         Deputado novoDeputado = new Deputado(CD_CARGO, NR_CANDIDATO, NM_URNA_CANDIDATO, NR_PARTIDO, SG_PARTIDO, NR_FEDERACAO, data[0], data[1], data[2], CD_GENERO, CD_SIT_TOT_TURNO, NM_TIPO_DESTINACAO_VOTOS, CD_SITUACAO_CANDIDATO_TOT);
 
@@ -262,8 +263,10 @@ public class Eleicao {
 
             Partido partidoTemp = partidos.get(NR_PARTIDO);
             Deputado deputadoTemp = partidoTemp.retornaDeputado(NR_VOTAVEL);
+            //System.out.println(deputadoTemp + " " + NR_VOTAVEL);
+
             if(deputadoTemp != null){
-                if (deputadoTemp.getTipoDeVoto() == "Válido (legenda)"){
+                if (deputadoTemp.getTipoDeVoto().equals("Válido (legenda)")){
                     partidoTemp.adicionaVotosDeLegenda(QT_VOTOS);
                     qtdVotosDeLegenda += QT_VOTOS;
                 }
@@ -272,10 +275,19 @@ public class Eleicao {
                     partidoTemp.adicionaVotosNominais(QT_VOTOS);
                     qtdVotosNominais += QT_VOTOS;
                 }
+                else{
+                    System.out.println("morreu aqui 1");
+                }
+            }
+            else{
+                //System.out.println(NR_VOTAVEL);
             }
         }
         else{
             Partido partidoTemp = partidos.get(NR_VOTAVEL);
+            if(partidoTemp == null){
+                return;
+            }
             partidoTemp.adicionaVotosDeLegenda(QT_VOTOS);
             qtdVotosDeLegenda += QT_VOTOS;
         }
@@ -331,10 +343,13 @@ public class Eleicao {
         } );
     }
     
-    public void imprimeEleitos(BufferedWriter arquivo){
+    public void imprimeEleitos(BufferedWriter arquivo, int cargo){
         try {
             int i=1;
-            arquivo.append("Deputados federais eleitos:\n");
+            if(cargo == 6)
+                arquivo.append("Deputados federais eleitos:\n");
+            else
+                arquivo.append("Deputados estaduais eleitos:\n");
             for(Deputado d: deputadosEleitos){
                 arquivo.append(i+" - ");
                 if(d.getNumeroDaFederacao() != -1){
@@ -460,8 +475,18 @@ public class Eleicao {
             System.out.println(e);
         }
     }
+    public void imprimePartidos(){
+        System.out.println("Número de vagas: " + vagas + "\n");
+        for(Partido p : partidos.values()){
+            System.out.println(p);
+            for(Deputado d : p.getDeputados().values()){
+                System.out.println(d);
+            }
+            System.out.println();
+        }
+    }
     
-    public void imprimeInformacoes(BufferedWriter arquivo) {
+    public void imprimeInformacoes(BufferedWriter arquivo, int cargo) {
         qtdVotosValidos = qtdVotosNominais + qtdVotosDeLegenda;
         try {
             Locale brLocale = Locale.forLanguageTag("pt-BR");
@@ -473,7 +498,7 @@ public class Eleicao {
             ordenaDeputadosPorQuantidadeDeVotos(deputados);
             ordenaDeputadosPorQuantidadeDeVotos(deputadosEleitos);
             ordenaPartidosPorQuantidadeDeVotos(partidoss);
-            imprimeEleitos(arquivo);
+            imprimeEleitos(arquivo, cargo);
             imprimeMaisVotados(arquivo);
             imprimeDiscrepancias(arquivo);
             imprimeVotosDosPartidos(arquivo);

@@ -85,6 +85,11 @@ public class Partido {
             if(d.getQuantidadeDeVotos() > deputadoMaisVotado.getQuantidadeDeVotos() && (d.getSituacaoCandidato() == 2 || d.getSituacaoCandidato() == 16)){
                 deputadoMaisVotado = d;
             }
+            else if(d.getQuantidadeDeVotos() == deputadoMaisVotado.getQuantidadeDeVotos() && (d.getSituacaoCandidato() == 2 || d.getSituacaoCandidato() == 16)){
+                if(d.getIdade() > deputadoMaisVotado.getIdade()){
+                    deputadoMaisVotado = d;
+                }
+            }
         }  
         return deputadoMaisVotado;
     }
@@ -93,6 +98,11 @@ public class Partido {
         for(Deputado d : deputados.values()){
             if(d.getQuantidadeDeVotos() < deputadoMenosVotado.getQuantidadeDeVotos() && (d.getSituacaoCandidato() == 2 || d.getSituacaoCandidato() == 16)){
                 deputadoMenosVotado = d;
+            }
+            else if(d.getQuantidadeDeVotos() == deputadoMenosVotado.getQuantidadeDeVotos() && (d.getSituacaoCandidato() == 2 || d.getSituacaoCandidato() == 16)){
+                if(d.getIdade() < deputadoMenosVotado.getIdade()){
+                    deputadoMenosVotado = d;
+                }
             }
         }  
         return deputadoMenosVotado;

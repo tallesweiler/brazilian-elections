@@ -132,12 +132,16 @@ public class Deputado {
         Locale brLocale = Locale.forLanguageTag("pt-BR");
         NumberFormat nf = NumberFormat.getInstance(brLocale);
         
-        return nomeNaUrna+" ("+siglaDoPartido+", "+nf.format(quantidadeDeVotos)+" votos)";
+        if(quantidadeDeVotos > 1)
+            return nomeNaUrna+" ("+siglaDoPartido+", "+nf.format(quantidadeDeVotos)+" votos)";
+        return nomeNaUrna+" ("+siglaDoPartido+", "+nf.format(quantidadeDeVotos)+" voto)";
     }
     public String maisEMenosVotado() {
         Locale brLocale = Locale.forLanguageTag("pt-BR");
         NumberFormat nf = NumberFormat.getInstance(brLocale);
         
-        return nomeNaUrna+" ("+numeroDoCandidato+", "+nf.format(quantidadeDeVotos)+" votos)";
+        if(quantidadeDeVotos > 1)
+            return nomeNaUrna+" ("+numeroDoCandidato+", "+nf.format(quantidadeDeVotos)+" votos)";
+        return nomeNaUrna+" ("+numeroDoCandidato+", "+nf.format(quantidadeDeVotos)+" voto)";
     }
 }
