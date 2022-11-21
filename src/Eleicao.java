@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.text.NumberFormat;
+import java.time.LocalDate;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.Collections;
@@ -37,6 +38,7 @@ public class Eleicao {
     private LinkedList<Deputado> deputadosQueDeveriamGanhar;
     private LinkedList<Deputado> deputadosQueDeveriamPerder;
     private Map<Integer, Partido> partidos; 
+
     
     public Eleicao(){
         this.vagas=0;
@@ -59,7 +61,7 @@ public class Eleicao {
         this.partidos=new HashMap<>();
     }
     
-    public void preencheDeputados(String nomeArquivo, String sigla, int cargo) throws FileNotFoundException, IOException {
+    public void preencheDeputados(String nomeArquivo, int cargo, LocalDate data) throws FileNotFoundException, IOException {
         try(FileInputStream in=new FileInputStream(nomeArquivo);
             Reader r=new InputStreamReader(in, "ISO-8859-1");
             BufferedReader br=new BufferedReader(r);) 
@@ -69,7 +71,7 @@ public class Eleicao {
 
             while(linha!=null) {
                 try (Scanner scan=new Scanner(linha)) {
-                    Deputado novoDeputado=preencheDeputado(scan, cargo);
+                    Deputado novoDeputado=preencheDeputado(scan, cargo, data);
                     if(novoDeputado!=null){
                         Partido partidoTemp=partidos.get(novoDeputado.getNumeroDoPartido());
                         partidoTemp.adicionaDeputado(novoDeputado.getNumeroDoCandidato(), novoDeputado);
@@ -85,7 +87,7 @@ public class Eleicao {
             System.out.println(e);
         }
     }
-    private Deputado preencheDeputado(Scanner scan, int cargo) {
+    private Deputado preencheDeputado(Scanner scan, int cargo, LocalDate data) {
         int CD_CARGO;                       // 6 para deputado federal e 7 para deputado estadual;
         int NR_CANDIDATO;                   // número do candidato;
         String NM_URNA_CANDIDATO;           // nome do candidato na urna;
@@ -165,8 +167,8 @@ public class Eleicao {
             return null;
         }
 
-        String[] data=DT_NASCIMENTO.split("/");
-        Deputado novoDeputado=new Deputado(CD_CARGO, NR_CANDIDATO, NM_URNA_CANDIDATO, NR_PARTIDO, SG_PARTIDO, NR_FEDERACAO, data[0], data[1], data[2], CD_GENERO, CD_SIT_TOT_TURNO, NM_TIPO_DESTINACAO_VOTOS, CD_SITUACAO_CANDIDATO_TOT);
+        String[] data2=DT_NASCIMENTO.split("/");
+        Deputado novoDeputado=new Deputado(CD_CARGO, NR_CANDIDATO, NM_URNA_CANDIDATO, NR_PARTIDO, SG_PARTIDO, NR_FEDERACAO, data2[0], data2[1], data2[2], data, CD_GENERO, CD_SIT_TOT_TURNO, NM_TIPO_DESTINACAO_VOTOS, CD_SITUACAO_CANDIDATO_TOT);
 
         if(CD_SIT_TOT_TURNO==2 || CD_SIT_TOT_TURNO==3) {
             vagas++;
@@ -193,7 +195,7 @@ public class Eleicao {
 
         return novoDeputado;
     }
-    public void preencheVotosDeputados(String nomeArquivo, String sigla, int cargo) throws FileNotFoundException, IOException {
+    public void preencheVotosDeputados(String nomeArquivo, int cargo) throws FileNotFoundException, IOException {
         try(FileInputStream in=new FileInputStream(nomeArquivo);
             Reader r=new InputStreamReader(in, "ISO-8859-1");
             BufferedReader br=new BufferedReader(r);) 
@@ -324,7 +326,7 @@ public class Eleicao {
             public int compare(Partido p1, Partido p2) { 
                 int a=p2.deputadoMaisVotado().getQuantidadeDeVotos()-p1.deputadoMaisVotado().getQuantidadeDeVotos();
                 if(a==0){
-                    a=p2.deputadoMaisVotado().getIdadeEmDias()-p1.deputadoMaisVotado().getIdadeEmDias();
+                    a=p2.deputadoMaisVotado().getIdade()-p1.deputadoMaisVotado().getIdade();
                 }
                 return a;
             } 

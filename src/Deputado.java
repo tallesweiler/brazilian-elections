@@ -10,7 +10,6 @@ public class Deputado {
     private int idade;                  // idade do candidato
     private int genero;                 // 2 masculino 4 feminino
     private int foiEleito;              // 2 ou 3 representam candidato eleito
-    private int idadeEmDias;            // idade do candidato para fins de comparação
     private int numeroDoPartido;        // número do partido;
     private int numeroDoCandidato;      // numero do candidato na urna
     private int numeroDaFederacao;      // numero da federacao, -1 representando candidato em partido isolado(que nao participa de federacao)
@@ -21,7 +20,7 @@ public class Deputado {
     private String siglaDoPartido;      // sigla do partido;
     private LocalDate dataDeNascimento; // data de nascimento do candidato
 
-    public Deputado(int cargo, int numeroDoCandidato, String nomeNaUrna, int numeroDoPartido, String siglaDoPartido, int numeroDaFederacao, String dia, String mes, String ano, int genero, int foiEleito, String tipoDeVoto, int situacaoCandidato) {
+    public Deputado(int cargo, int numeroDoCandidato, String nomeNaUrna, int numeroDoPartido, String siglaDoPartido, int numeroDaFederacao, String dia, String mes, String ano, LocalDate data, int genero, int foiEleito, String tipoDeVoto, int situacaoCandidato) {
         this.cargo=cargo;
         this.genero=genero;
         this.foiEleito=foiEleito;
@@ -33,8 +32,7 @@ public class Deputado {
         this.numeroDaFederacao=numeroDaFederacao;
         this.numeroDoCandidato=numeroDoCandidato;
         this.dataDeNascimento=LocalDate.of(Integer.parseInt(ano), Integer.parseInt(mes), Integer.parseInt(dia));
-        this.idadeEmDias=Period.between(dataDeNascimento, LocalDate.of(2022, 10, 2)).getDays();
-        this.idade=Period.between(dataDeNascimento, LocalDate.of(2022, 10, 2)).getYears();
+        this.idade=Period.between(dataDeNascimento, data).getYears();
     }
     public Deputado(){
         this.quantidadeDeVotos=-1;
@@ -63,12 +61,6 @@ public class Deputado {
     }
     public void setFoiEleito(int foiEleito) {
         this.foiEleito=foiEleito;
-    }
-    public int getIdadeEmDias() {
-        return idadeEmDias;
-    }
-    public void setIdadeEmDias(int idadeEmDias) {
-        this.idadeEmDias=idadeEmDias;
     }
     public int getNumeroDoPartido() {
         return numeroDoPartido;
@@ -125,6 +117,8 @@ public class Deputado {
         this.dataDeNascimento=dataDeNascimento;
     }
     
+   
+
     public void adicionaVotos(int valor) {
         this.setQuantidadeDeVotos(this.getQuantidadeDeVotos()+valor);
     }
