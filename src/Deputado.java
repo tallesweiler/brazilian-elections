@@ -125,8 +125,6 @@ public class Deputado {
         this.dataDeNascimento=dataDeNascimento;
     }
     
-   
-
     public void adicionaVotos(int valor) {
         this.setQuantidadeDeVotos(this.getQuantidadeDeVotos()+valor);
     }

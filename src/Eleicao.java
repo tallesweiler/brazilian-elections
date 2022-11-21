@@ -37,7 +37,6 @@ public class Eleicao {
     private LinkedList<Deputado> deputadosQueDeveriamGanhar;
     private LinkedList<Deputado> deputadosQueDeveriamPerder;
     private Map<Integer, Partido> partidos; 
-
     
     public Eleicao(){
         this.vagas=0;
