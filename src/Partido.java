@@ -14,12 +14,12 @@ public class Partido {
     private Map<Integer, Deputado> deputados;
     
     public Partido(int numeroDoPartido, String siglaDoPartido) {
-        this.numeroDoPartido = numeroDoPartido;
-        this.siglaDoPartido = siglaDoPartido;
-        this.quantidadeDeVotosNominais = 0;
-        this.quantidadeDeVotosDeLegenda = 0;
-        this.qtdDeputadosEleitos = 0;
-        this.deputados = new HashMap<>();
+        this.qtdDeputadosEleitos=0;
+        this.quantidadeDeVotosNominais=0;
+        this.quantidadeDeVotosDeLegenda=0;
+        this.siglaDoPartido=siglaDoPartido;
+        this.numeroDoPartido=numeroDoPartido;
+        this.deputados=new HashMap<>();
     }
     public Partido() {}
     
@@ -27,37 +27,37 @@ public class Partido {
         return numeroDoPartido;
     }
     public void setNumeroDoPartido(int numeroDoPartido) {
-        this.numeroDoPartido = numeroDoPartido;
+        this.numeroDoPartido=numeroDoPartido;
     }
     public String getSiglaDoPartido() {
         return siglaDoPartido;
     }
     public void setSiglaDoPartido(String siglaDoPartido) {
-        this.siglaDoPartido = siglaDoPartido;
+        this.siglaDoPartido=siglaDoPartido;
     }
     public Map<Integer, Deputado> getDeputados() {
         return deputados;
     }
     public void setDeputados(Map<Integer, Deputado> deputados){
-        this.deputados = deputados;
+        this.deputados=deputados;
     }
     public int getQuantidadeDeVotosNominais() {
         return quantidadeDeVotosNominais;
     }
     public void setQuantidadeDeVotosNominais(int quantidadeDeVotosNominais) {
-        this.quantidadeDeVotosNominais = quantidadeDeVotosNominais;
+        this.quantidadeDeVotosNominais=quantidadeDeVotosNominais;
     }
     public int getQuantidadeDeVotosDeLegenda() {
         return quantidadeDeVotosDeLegenda;
     }
     public void setQuantidadeDeVotosDeLegenda(int quantidadeDeVotosDeLegenda) {
-        this.quantidadeDeVotosDeLegenda = quantidadeDeVotosDeLegenda;
+        this.quantidadeDeVotosDeLegenda=quantidadeDeVotosDeLegenda;
     }
     public int getQtdDeputadosEleitos() {
         return qtdDeputadosEleitos;
     }
     public void setQtdDeputadosEleitos(int qtdDeputadosEleitos) {
-        this.qtdDeputadosEleitos = qtdDeputadosEleitos;
+        this.qtdDeputadosEleitos=qtdDeputadosEleitos;
     }
 
     public Deputado retornaDeputado(int id){
@@ -70,38 +70,38 @@ public class Partido {
         this.deputados.put(id, deputado);
     }
     public void adicionaVotosNominais(int valor) {
-        this.setQuantidadeDeVotosNominais(this.getQuantidadeDeVotosNominais() + valor);
+        this.setQuantidadeDeVotosNominais(this.getQuantidadeDeVotosNominais()+valor);
     }
     public void adicionaVotosDeLegenda(int valor) {
-        this.setQuantidadeDeVotosDeLegenda(this.getQuantidadeDeVotosDeLegenda() + valor);
+        this.setQuantidadeDeVotosDeLegenda(this.getQuantidadeDeVotosDeLegenda()+valor);
     }
     public void adicionaEleito(){
         this.qtdDeputadosEleitos++;
     }
     
     public Deputado deputadoMaisVotado() {
-        Deputado deputadoMaisVotado = new Deputado();
-        for(Deputado d : deputados.values()){
-            if(d.getQuantidadeDeVotos() > deputadoMaisVotado.getQuantidadeDeVotos() && (d.getSituacaoCandidato() == 2 || d.getSituacaoCandidato() == 16)){
-                deputadoMaisVotado = d;
+        Deputado deputadoMaisVotado=new Deputado();
+        for(Deputado d : deputados.values()) {
+            if(d.getQuantidadeDeVotos()>deputadoMaisVotado.getQuantidadeDeVotos() && (d.getSituacaoCandidato()==2 || d.getSituacaoCandidato()==16)) {
+                deputadoMaisVotado=d;
             }
-            else if(d.getQuantidadeDeVotos() == deputadoMaisVotado.getQuantidadeDeVotos() && (d.getSituacaoCandidato() == 2 || d.getSituacaoCandidato() == 16)){
-                if(d.getIdade() > deputadoMaisVotado.getIdade()){
-                    deputadoMaisVotado = d;
+            else if(d.getQuantidadeDeVotos()==deputadoMaisVotado.getQuantidadeDeVotos() && (d.getSituacaoCandidato()==2 || d.getSituacaoCandidato()==16)) {
+                if(d.getIdade()>deputadoMaisVotado.getIdade()) {
+                    deputadoMaisVotado=d;
                 }
             }
         }  
         return deputadoMaisVotado;
     }
     public Deputado deputadoMenosVotado() {
-        Deputado deputadoMenosVotado = deputadoMaisVotado();
-        for(Deputado d : deputados.values()){
-            if(d.getQuantidadeDeVotos() < deputadoMenosVotado.getQuantidadeDeVotos() && (d.getSituacaoCandidato() == 2 || d.getSituacaoCandidato() == 16)){
-                deputadoMenosVotado = d;
+        Deputado deputadoMenosVotado=deputadoMaisVotado();
+        for(Deputado d : deputados.values()) {
+            if(d.getQuantidadeDeVotos()<deputadoMenosVotado.getQuantidadeDeVotos() && (d.getSituacaoCandidato()==2 || d.getSituacaoCandidato()==16)) {
+                deputadoMenosVotado=d;
             }
-            else if(d.getQuantidadeDeVotos() == deputadoMenosVotado.getQuantidadeDeVotos() && (d.getSituacaoCandidato() == 2 || d.getSituacaoCandidato() == 16)){
-                if(d.getIdade() < deputadoMenosVotado.getIdade()){
-                    deputadoMenosVotado = d;
+            else if(d.getQuantidadeDeVotos()==deputadoMenosVotado.getQuantidadeDeVotos() && (d.getSituacaoCandidato()==2 || d.getSituacaoCandidato()==16)) {
+                if(d.getIdade()<deputadoMenosVotado.getIdade()) {
+                    deputadoMenosVotado=d;
                 }
             }
         }  
@@ -112,8 +112,8 @@ public class Partido {
         return siglaDoPartido+" - "+numeroDoPartido+", ";
     }
     public String votosPartido() {
-        Locale brLocale = Locale.forLanguageTag("pt-BR");
-        NumberFormat nf = NumberFormat.getInstance(brLocale);
+        Locale brLocale=Locale.forLanguageTag("pt-BR");
+        NumberFormat nf=NumberFormat.getInstance(brLocale);
 
         String string=toString();
 
@@ -130,9 +130,9 @@ public class Partido {
             string+=" nominal e ";
 
         if (qtdDeputadosEleitos>1)
-            string+=nf.format(quantidadeDeVotosDeLegenda)+" de legenda), " + qtdDeputadosEleitos + " candidatos eleitos";
+            string+=nf.format(quantidadeDeVotosDeLegenda)+" de legenda), "+qtdDeputadosEleitos+" candidatos eleitos";
         else
-            string+=nf.format(quantidadeDeVotosDeLegenda)+" de legenda), " + qtdDeputadosEleitos + " candidato eleito";
+            string+=nf.format(quantidadeDeVotosDeLegenda)+" de legenda), "+qtdDeputadosEleitos+" candidato eleito";
 
         return string;
     }
