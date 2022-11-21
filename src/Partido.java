@@ -1,9 +1,8 @@
 package src;
 
 import java.text.NumberFormat;
-import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Locale;
-import java.util.Map;
 
 public class Partido {
     private int numeroDoPartido;
@@ -11,17 +10,17 @@ public class Partido {
     private int quantidadeDeVotosNominais;
     private int quantidadeDeVotosDeLegenda;
     private String siglaDoPartido;
-    private Map<Integer, Deputado> deputados;
+
+    private LinkedList<Deputado> deputados;
     
     public Partido(int numeroDoPartido, String siglaDoPartido) {
-        this.qtdDeputadosEleitos=0;
-        this.quantidadeDeVotosNominais=0;
-        this.quantidadeDeVotosDeLegenda=0;
-        this.siglaDoPartido=siglaDoPartido;
-        this.numeroDoPartido=numeroDoPartido;
-        this.deputados=new HashMap<>();
+        this.qtdDeputadosEleitos        = 0;
+        this.quantidadeDeVotosNominais  = 0;
+        this.quantidadeDeVotosDeLegenda = 0;
+        this.siglaDoPartido             = siglaDoPartido;
+        this.numeroDoPartido            = numeroDoPartido;
+        this.deputados                  = new LinkedList<>();
     }
-    public Partido() {}
     
     public int getNumeroDoPartido() {
         return numeroDoPartido;
@@ -34,12 +33,6 @@ public class Partido {
     }
     public void setSiglaDoPartido(String siglaDoPartido) {
         this.siglaDoPartido=siglaDoPartido;
-    }
-    public Map<Integer, Deputado> getDeputados() {
-        return deputados;
-    }
-    public void setDeputados(Map<Integer, Deputado> deputados){
-        this.deputados=deputados;
     }
     public int getQuantidadeDeVotosNominais() {
         return quantidadeDeVotosNominais;
@@ -59,15 +52,11 @@ public class Partido {
     public void setQtdDeputadosEleitos(int qtdDeputadosEleitos) {
         this.qtdDeputadosEleitos=qtdDeputadosEleitos;
     }
-
-    public Deputado retornaDeputado(int id){
-        return deputados.get(id);
+    public void adicionaDeputado(Deputado deputado) {
+        deputados.add(deputado);
     }
     public int retornaVotosTotais() {
         return quantidadeDeVotosDeLegenda+quantidadeDeVotosNominais;
-    }
-    public void adicionaDeputado(int id, Deputado deputado) {
-        this.deputados.put(id, deputado);
     }
     public void adicionaVotosNominais(int valor) {
         this.setQuantidadeDeVotosNominais(this.getQuantidadeDeVotosNominais()+valor);
@@ -80,12 +69,12 @@ public class Partido {
     }
     
     public Deputado deputadoMaisVotado() {
-        Deputado deputadoMaisVotado=new Deputado();
-        for(Deputado d : deputados.values()) {
-            if(d.getQuantidadeDeVotos()>deputadoMaisVotado.getQuantidadeDeVotos() && (d.getSituacaoCandidato()==2 || d.getSituacaoCandidato()==16)) {
+        Deputado deputadoMaisVotado = new Deputado();
+        for(Deputado d : deputados) {
+            if(d.getQuantidadeDeVotos() > deputadoMaisVotado.getQuantidadeDeVotos() && (d.getSituacaoCandidato() == 2 || d.getSituacaoCandidato() == 16)) {
                 deputadoMaisVotado=d;
             }
-            else if(d.getQuantidadeDeVotos()==deputadoMaisVotado.getQuantidadeDeVotos() && (d.getSituacaoCandidato()==2 || d.getSituacaoCandidato()==16)) {
+            else if(d.getQuantidadeDeVotos() == deputadoMaisVotado.getQuantidadeDeVotos() && (d.getSituacaoCandidato() == 2 || d.getSituacaoCandidato() == 16)) {
                 if(d.getIdade()>deputadoMaisVotado.getIdade()) {
                     deputadoMaisVotado=d;
                 }
@@ -95,11 +84,11 @@ public class Partido {
     }
     public Deputado deputadoMenosVotado() {
         Deputado deputadoMenosVotado=deputadoMaisVotado();
-        for(Deputado d : deputados.values()) {
-            if(d.getQuantidadeDeVotos()<deputadoMenosVotado.getQuantidadeDeVotos() && (d.getSituacaoCandidato()==2 || d.getSituacaoCandidato()==16)) {
+        for(Deputado d : deputados) {
+            if(d.getQuantidadeDeVotos() < deputadoMenosVotado.getQuantidadeDeVotos() && (d.getSituacaoCandidato() == 2 || d.getSituacaoCandidato() == 16)) {
                 deputadoMenosVotado=d;
             }
-            else if(d.getQuantidadeDeVotos()==deputadoMenosVotado.getQuantidadeDeVotos() && (d.getSituacaoCandidato()==2 || d.getSituacaoCandidato()==16)) {
+            else if(d.getQuantidadeDeVotos()==deputadoMenosVotado.getQuantidadeDeVotos() && (d.getSituacaoCandidato() == 2 || d.getSituacaoCandidato() == 16)) {
                 if(d.getIdade()<deputadoMenosVotado.getIdade()) {
                     deputadoMenosVotado=d;
                 }

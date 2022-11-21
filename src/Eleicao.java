@@ -31,34 +31,37 @@ public class Eleicao {
     private int idadeMaiorQue60;
     private int qtdVotosNominais;
     private int qtdVotosDeLegenda;
-    private LinkedList<Partido> listaDePartidos;
-    private LinkedList<Deputado> deputados;
-    private LinkedList<Deputado> deputadosEleitos;
-    private LinkedList<Deputado> deputadosMaisVotados;
-    private LinkedList<Deputado> deputadosQueDeveriamGanhar;
-    private LinkedList<Deputado> deputadosQueDeveriamPerder;
-    private Map<Integer, Partido> partidos; 
-
     
+    private LinkedList<Deputado> listaDeputados;
+    private LinkedList<Deputado> listaDeputadosEleitos;
+    private LinkedList<Deputado> listaDeputadosMaisVotados;
+    private LinkedList<Deputado> listaDeputadosQueDeveriamGanhar;
+    private LinkedList<Deputado> listaDeputadosQueDeveriamPerder;
+    private LinkedList<Partido> listaPartidos;
+    
+    private Map<Integer, Partido> partidos;
+    private Map<Integer, Deputado> deputados; 
+
     public Eleicao(){
-        this.vagas=0;
-        this.qtdFeminino=0;
-        this.qtdMasculino=0;
-        this.qtdVotosValidos=0;
-        this.idadeMenorQue30=0;
-        this.idadeMenorQue40=0;
-        this.idadeMenorQue50=0;
-        this.idadeMenorQue60=0;
-        this.idadeMaiorQue60=0;
-        this.qtdVotosNominais=0;
-        this.qtdVotosDeLegenda=0;
-        this.deputados=new LinkedList<>();
-        this.listaDePartidos=new LinkedList<>();
-        this.deputadosEleitos=new LinkedList<>();
-        this.deputadosMaisVotados=new LinkedList<>();
-        this.deputadosQueDeveriamGanhar=new LinkedList<>();
-        this.deputadosQueDeveriamPerder=new LinkedList<>();
-        this.partidos=new HashMap<>();
+        vagas                              = 0;
+        qtdFeminino                        = 0;
+        qtdMasculino                       = 0;
+        qtdVotosValidos                    = 0;
+        idadeMenorQue30                    = 0;
+        idadeMenorQue40                    = 0;
+        idadeMenorQue50                    = 0;
+        idadeMenorQue60                    = 0;
+        idadeMaiorQue60                    = 0;
+        qtdVotosNominais                   = 0;
+        qtdVotosDeLegenda                  = 0;
+        listaDeputados                     = new LinkedList<>();
+        listaPartidos                      = new LinkedList<>();
+        listaDeputadosEleitos              = new LinkedList<>();
+        listaDeputadosMaisVotados          = new LinkedList<>();
+        listaDeputadosQueDeveriamGanhar    = new LinkedList<>();
+        listaDeputadosQueDeveriamPerder    = new LinkedList<>();
+        partidos                           = new HashMap<>();
+        deputados                          = new HashMap<>();
     }
     
     public void preencheDeputados(String nomeArquivo, int cargo, LocalDate data) throws FileNotFoundException, IOException {
@@ -66,19 +69,31 @@ public class Eleicao {
             Reader r=new InputStreamReader(in, "ISO-8859-1");
             BufferedReader br=new BufferedReader(r);) 
         {
-            String linha=br.readLine();
-            linha=br.readLine();
+            String linha = br.readLine(); // consome a primeira linha
+            String[] infoCandidato = null;
+            while((linha = br.readLine()) != null){
+                linha = linha.replaceAll("\"", "");
+                //System.out.println(linha);
+                infoCandidato = linha.split(";");
+                int CD_CARGO                        = Integer.parseInt(infoCandidato[13]);
+                int NR_CANDIDATO                    = Integer.parseInt(infoCandidato[16]);
+                String NM_URNA_CANDIDATO            = infoCandidato[18];
+                int NR_PARTIDO                      = Integer.parseInt(infoCandidato[27]);
+                String SG_PARTIDO                   = infoCandidato[28];
+                int NR_FEDERACAO                    = Integer.parseInt(infoCandidato[30]);
+                String DT_NASCIMENTO                = infoCandidato[42];
+                int CD_GENERO                       = Integer.parseInt(infoCandidato[45]);
+                int CD_SIT_TOT_TURNO                = Integer.parseInt(infoCandidato[56]);
+                String NM_TIPO_DESTINACAO_VOTOS     = infoCandidato[67];
+                int CD_SITUACAO_CANDIDATO_TOT       = Integer.parseInt(infoCandidato[68]);
 
-            while(linha!=null) {
-                try (Scanner scan=new Scanner(linha)) {
-                    Deputado novoDeputado=preencheDeputado(scan, cargo, data);
-                    if(novoDeputado!=null){
-                        Partido partidoTemp=partidos.get(novoDeputado.getNumeroDoPartido());
-                        partidoTemp.adicionaDeputado(novoDeputado.getNumeroDoCandidato(), novoDeputado);
+                if(partidos.get(NR_PARTIDO) == null){
+                    partidos.put(NR_PARTIDO, new Partido(NR_PARTIDO, SG_PARTIDO));
+                }
+                if(CD_CARGO == cargo){
+                    if((CD_SITUACAO_CANDIDATO_TOT == 2 || CD_SITUACAO_CANDIDATO_TOT == 16) || NM_TIPO_DESTINACAO_VOTOS.equals("Válido (legenda)")){
+                        preencheDeputado(CD_CARGO, NR_CANDIDATO, NM_URNA_CANDIDATO, NR_PARTIDO, SG_PARTIDO, NR_FEDERACAO, DT_NASCIMENTO, CD_GENERO, CD_SIT_TOT_TURNO, NM_TIPO_DESTINACAO_VOTOS, CD_SITUACAO_CANDIDATO_TOT, data);
                     }
-                    linha=br.readLine();
-                } catch(NoSuchElementException e) {
-                    System.out.println(e);
                 }
             }
         } catch (UnsupportedEncodingException e) {
@@ -87,90 +102,12 @@ public class Eleicao {
             System.out.println(e);
         }
     }
-    private Deputado preencheDeputado(Scanner scan, int cargo, LocalDate data) {
-        int CD_CARGO;                       // 6 para deputado federal e 7 para deputado estadual;
-        int NR_CANDIDATO;                   // número do candidato;
-        String NM_URNA_CANDIDATO;           // nome do candidato na urna;
-        int NR_PARTIDO;                     // número do partido;
-        String SG_PARTIDO;                  // sigla do partido;
-        int NR_FEDERACAO;                   // número da federação, com -1 representando candidato em partido isolado (que não participa de federação)
-        String DT_NASCIMENTO;               // data de nascimento
-        int CD_GENERO;                      // 2 representando masculino e 4 representando feminino;
-        int CD_SIT_TOT_TURNO;               // 2 ou 3 representando candidato eleito;
-        String NM_TIPO_DESTINACAO_VOTOS;    // quando for “Válido (legenda)” os votos deste candidato vão para a legenda (e devem ser computados para a legenda, mesmo em caso de CD_SITUACAO_CANDIDADO_TOT diferente de 2 ou 16)
-        int CD_SITUACAO_CANDIDATO_TOT;      // processar apenas aqueles com os valores 2 ou 16 que representam candidatos com candidatura deferida;
+    private void preencheDeputado(int CD_CARGO, int NR_CANDIDATO, String NM_URNA_CANDIDATO, int NR_PARTIDO, String SG_PARTIDO, int NR_FEDERACAO, String DT_NASCIMENTO, int CD_GENERO, int CD_SIT_TOT_TURNO, String NM_TIPO_DESTINACAO_VOTOS, int CD_SITUACAO_CANDIDATO_TOT, LocalDate data) {
 
-        scan.useDelimiter(";");
-        passaDireto(13, scan);
-        scan.useDelimiter("\"");
-        passaDireto(1, scan);
-        CD_CARGO=scan.nextInt();
-        scan.useDelimiter(";");
-        passaDireto(3, scan);
-        scan.useDelimiter("\"");
-        passaDireto(1, scan);
-        NR_CANDIDATO=scan.nextInt();
-        scan.useDelimiter(";");
-        passaDireto(2, scan);
-        scan.useDelimiter("\"");
-        passaDireto(1, scan);
-        NM_URNA_CANDIDATO=scan.next();
-        scan.useDelimiter(";");
-        passaDireto(9, scan);
-        scan.useDelimiter("\"");
-        passaDireto(1, scan);
-        NR_PARTIDO=scan.nextInt();
-        scan.useDelimiter(";");
-        passaDireto(1, scan);
-        scan.useDelimiter("\"");
-        passaDireto(1, scan);
-        SG_PARTIDO=scan.next();
-        scan.useDelimiter(";");
-        passaDireto(2, scan);
-        scan.useDelimiter("\"");
-        passaDireto(1, scan);
-        NR_FEDERACAO=scan.nextInt();
-        scan.useDelimiter(";");
-        passaDireto(12, scan);
-        scan.useDelimiter("\"");
-        passaDireto(1, scan);
-        DT_NASCIMENTO=scan.next();
-        scan.useDelimiter(";");
-        passaDireto(3, scan);
-        scan.useDelimiter("\"");
-        passaDireto(1, scan);
-        CD_GENERO=scan.nextInt();
-        scan.useDelimiter(";");
-        passaDireto(11, scan);
-        scan.useDelimiter("\"");
-        passaDireto(1, scan);
-        CD_SIT_TOT_TURNO=scan.nextInt();
-        scan.useDelimiter(";");
-        passaDireto(11, scan);
-        scan.useDelimiter("\"");
-        passaDireto(1, scan);
-        NM_TIPO_DESTINACAO_VOTOS=scan.next();
-        scan.useDelimiter(";");
-        passaDireto(1, scan);
-        scan.useDelimiter("\"");
-        passaDireto(1, scan);
-        CD_SITUACAO_CANDIDATO_TOT=scan.nextInt();
-        scan.nextLine();
+        String[] data2 = DT_NASCIMENTO.split("/");
+        Deputado novoDeputado = new Deputado(CD_CARGO, NR_CANDIDATO, NM_URNA_CANDIDATO, NR_PARTIDO, SG_PARTIDO, NR_FEDERACAO, data2[0], data2[1], data2[2], data, CD_GENERO, CD_SIT_TOT_TURNO, NM_TIPO_DESTINACAO_VOTOS, CD_SITUACAO_CANDIDATO_TOT);
 
-        Partido partidoTemp=partidos.get(NR_PARTIDO);
-        if(partidoTemp==null) {
-            partidos.put(NR_PARTIDO, new Partido(NR_PARTIDO, SG_PARTIDO));
-            partidoTemp=partidos.get(NR_PARTIDO);
-        }
-
-        if (CD_CARGO!=cargo || (CD_SITUACAO_CANDIDATO_TOT!=2 && CD_SITUACAO_CANDIDATO_TOT!=16)) {
-            return null;
-        }
-
-        String[] data2=DT_NASCIMENTO.split("/");
-        Deputado novoDeputado=new Deputado(CD_CARGO, NR_CANDIDATO, NM_URNA_CANDIDATO, NR_PARTIDO, SG_PARTIDO, NR_FEDERACAO, data2[0], data2[1], data2[2], data, CD_GENERO, CD_SIT_TOT_TURNO, NM_TIPO_DESTINACAO_VOTOS, CD_SITUACAO_CANDIDATO_TOT);
-
-        if(CD_SIT_TOT_TURNO==2 || CD_SIT_TOT_TURNO==3) {
+        if(CD_SIT_TOT_TURNO == 2 || CD_SIT_TOT_TURNO == 3) {
             vagas++;
 
             if(novoDeputado.getIdade() < 30)
@@ -189,26 +126,30 @@ public class Eleicao {
             else if(novoDeputado.getGenero()==4)
                 qtdFeminino++;
 
-            deputadosEleitos.add(novoDeputado);
-            partidoTemp.adicionaEleito();
+            listaDeputadosEleitos.add(novoDeputado);
+            partidos.get(NR_PARTIDO).adicionaEleito();
         };
-
-        return novoDeputado;
+        deputados.put(NR_CANDIDATO, novoDeputado);
     }
+
     public void preencheVotosDeputados(String nomeArquivo, int cargo) throws FileNotFoundException, IOException {
         try(FileInputStream in=new FileInputStream(nomeArquivo);
             Reader r=new InputStreamReader(in, "ISO-8859-1");
             BufferedReader br=new BufferedReader(r);) 
         {
-            String linha=br.readLine();
-            linha=br.readLine();
+            String[] infoVotacao = null;
+            String linha = br.readLine();
+            while((linha = br.readLine()) != null){
+                linha = linha.replaceAll("\"", "");
+                //System.out.println(linha);
+                infoVotacao = linha.split(";");
 
-            while(linha!=null) {
-                try (Scanner scan=new Scanner(linha)) {
-                    preencheVotosDeputado(scan, cargo);
-                    linha=br.readLine();
-                } catch(NoSuchElementException e) {
-                    System.out.println(e);
+                int CD_CARGO    = Integer.parseInt(infoVotacao[17]);
+                int NR_VOTAVEL  = Integer.parseInt(infoVotacao[19]);
+                int QT_VOTOS    = Integer.parseInt(infoVotacao[21]);
+
+                if(CD_CARGO == cargo && !(NR_VOTAVEL >= 95 && NR_VOTAVEL <= 98)){
+                    preencheVotosDeputado(CD_CARGO, NR_VOTAVEL, QT_VOTOS);
                 }
             }
         } catch (UnsupportedEncodingException e) {
@@ -217,89 +158,43 @@ public class Eleicao {
             System.out.println(e);
         }
     }
-    private void preencheVotosDeputado(Scanner scan, int cargo) {
-        int CD_CARGO;    //6 para deputado federal e 7 para deputado estadual;
-        int NR_VOTAVEL;  //o número do candidato no caso de voto nominal ou o número do partido se for voto na legenda. Os números 95, 96, 97, 98 representam casos de votos em branco, nulos ou anulados, e, como só estamos nos concentrando nos votos válidos, linhas com esses números devem ser ignoradas. Atenção, pois há casos em que NR_VOTAVEL é um número de candidato, porém este candidato tem seus votos nominais redirecionados para a legenda como indicado acima para NM_TIPO_DESTINACAO_VOTOS no arquivo de candidatos igual a “Válido (legenda)”
-        int QT_VOTOS;    //número de votos (no candidato ou no partido) na sessão.
-
-        scan.useDelimiter(";");
-        passaDireto(17, scan);
-        scan.useDelimiter("\"");
-        passaDireto(1, scan);
-        CD_CARGO=scan.nextInt();
-        if (CD_CARGO!=cargo) {
-            scan.nextLine();
-            return;
-        }
-        scan.useDelimiter(";");
-        passaDireto(2, scan);
-        scan.useDelimiter("\"");
-        passaDireto(1, scan);
-        NR_VOTAVEL=scan.nextInt();
-        if (NR_VOTAVEL>= 95 && NR_VOTAVEL<=98) {
-            scan.nextLine();
-            return;
-        }
-        scan.useDelimiter(";");
-        passaDireto(2, scan);
-        scan.useDelimiter("\"");
-        passaDireto(1, scan);
-        QT_VOTOS=scan.nextInt();
-        scan.useDelimiter(";");
-        passaDireto(4, scan);
-        scan.nextLine();
-
-        if(NR_VOTAVEL>=100) { // votou em deputado
-            int NR_PARTIDO;
-            if(cargo==6) { // 1234
-                NR_PARTIDO=NR_VOTAVEL/100; // obtem partido
-            }
-            else { // 12345
-                NR_PARTIDO=NR_VOTAVEL/1000; // obtem partido
-            }
-
-            Partido partidoTemp=partidos.get(NR_PARTIDO);
-            Deputado deputadoTemp=partidoTemp.retornaDeputado(NR_VOTAVEL);
-
-            if(deputadoTemp!=null) {
-                if (deputadoTemp.getTipoDeVoto().equals("Válido (legenda)")) {
-                    partidoTemp.adicionaVotosDeLegenda(QT_VOTOS);
-                    qtdVotosDeLegenda+=QT_VOTOS;
-                }
-                else if(deputadoTemp.getSituacaoCandidato()==2 || deputadoTemp.getSituacaoCandidato()==16) {
-                    deputadoTemp.adicionaVotos(QT_VOTOS);
-                    partidoTemp.adicionaVotosNominais(QT_VOTOS);
-                    qtdVotosNominais+=QT_VOTOS;
-                }
-            }
-        }
-        else{
-            Partido partidoTemp=partidos.get(NR_VOTAVEL);
-            if(partidoTemp==null) {
+    private void preencheVotosDeputado(int CD_CARGO, int NR_VOTAVEL, int QT_VOTOS) {
+       
+        Partido partidoTemp = partidos.get(NR_VOTAVEL);
+        if(partidoTemp == null){ // voto em deputado
+            Deputado deputadoTemp = deputados.get(NR_VOTAVEL);
+            if(deputadoTemp == null){
                 return;
             }
+            partidoTemp = partidos.get(deputadoTemp.getNumeroDoPartido());
+            if(deputadoTemp.getTipoDeVoto().equals("Válido (legenda)")){
+                partidoTemp.adicionaVotosDeLegenda(QT_VOTOS);
+                qtdVotosDeLegenda+=QT_VOTOS;
+            }
+            else{
+                deputadoTemp.adicionaVotos(QT_VOTOS);
+                partidoTemp.adicionaVotosNominais(QT_VOTOS);
+                qtdVotosNominais+=QT_VOTOS;
+            }
+        }
+        else{ // voto em partido
             partidoTemp.adicionaVotosDeLegenda(QT_VOTOS);
             qtdVotosDeLegenda+=QT_VOTOS;
         }
     }
-    private void passaDireto(int i, Scanner scan) {
-        for (int aux=0;aux<i;aux++) {
-            scan.next();
+
+    private void preencheTodosDeputados() {
+        for(Deputado d : deputados.values()) {
+            listaDeputados.add(d);
+            partidos.get(d.getNumeroDoPartido()).adicionaDeputado(d);;
+        }
+    }
+    private void preencheTodosPartidos() {
+        for(Partido p : partidos.values()) {
+            listaPartidos.add(p);
         }
     }
 
-    public void preencheTodosDeputados() {
-        for(Partido p : partidos.values()) {
-            for(Deputado d : p.getDeputados().values()) {
-                deputados.add(d);
-            }
-        }
-    }
-    public void preencheTodosPartidos() {
-        for(Partido p : partidos.values()) {
-            listaDePartidos.add(p);
-        }
-    }
     public void ordenaDeputadosPorQuantidadeDeVotos(LinkedList<Deputado> deputados) {
         Collections.sort(deputados, new Comparator<Deputado>() {
             @Override
@@ -320,8 +215,8 @@ public class Eleicao {
             } 
         });
     }
-    public void ordenaPartidosPorDeputadoMaisVotado(LinkedList<Partido> listaDePartidos){
-        Collections.sort(listaDePartidos, new Comparator<Partido>() {
+    public void ordenaPartidosPorDeputadoMaisVotado(LinkedList<Partido> listaPartidos){
+        Collections.sort(listaPartidos, new Comparator<Partido>() {
             @Override
             public int compare(Partido p1, Partido p2) { 
                 int a=p2.deputadoMaisVotado().getQuantidadeDeVotos()-p1.deputadoMaisVotado().getQuantidadeDeVotos();
@@ -342,7 +237,7 @@ public class Eleicao {
             else
                 arquivo.append("Deputados estaduais eleitos:\n");
 
-            for(Deputado d: deputadosEleitos) {
+            for(Deputado d: listaDeputadosEleitos) {
                 arquivo.append(i+" - ");
                 if(d.getNumeroDaFederacao()!=-1) {
                     arquivo.append("*");
@@ -361,13 +256,13 @@ public class Eleicao {
 
             arquivo.append("Candidatos mais votados (em ordem decrescente de votação e respeitando número de vagas):\n");
 
-            for(Deputado d: deputados) {
+            for(Deputado d: listaDeputados) {
                 arquivo.append(i+" - ");
                 if(d.getNumeroDaFederacao()!=-1) {
                     arquivo.append("*");
                 }
                 arquivo.append(d+"\n");
-                deputadosMaisVotados.add(d);
+                listaDeputadosMaisVotados.add(d);
 
                 i++;
                 if (i>vagas)
@@ -379,20 +274,20 @@ public class Eleicao {
         }
     }
     public void imprimeDiscrepancias(BufferedWriter arquivo) {
-        for(Deputado d : deputadosEleitos) {
-            if(deputadosMaisVotados.indexOf(d)==-1) {
-                deputadosQueDeveriamPerder.add(d);
+        for(Deputado d : listaDeputadosEleitos) {
+            if(listaDeputadosMaisVotados.indexOf(d)==-1) {
+                listaDeputadosQueDeveriamPerder.add(d);
             }
         }
-        for(Deputado d : deputadosMaisVotados) {
-            if(deputadosEleitos.indexOf(d)==-1) {
-                deputadosQueDeveriamGanhar.add(d);
+        for(Deputado d : listaDeputadosMaisVotados) {
+            if(listaDeputadosEleitos.indexOf(d)==-1) {
+                listaDeputadosQueDeveriamGanhar.add(d);
             }
         }
         try {
             arquivo.append("Teriam sido eleitos se a votação fosse majoritária, e não foram eleitos:\n(com sua posição no ranking de mais votados)\n");
-            for (Deputado d : deputadosQueDeveriamGanhar) {
-                arquivo.append((deputados.indexOf(d)+1)+" - ");
+            for (Deputado d : listaDeputadosQueDeveriamGanhar) {
+                arquivo.append((listaDeputados.indexOf(d)+1)+" - ");
                 if(d.getNumeroDaFederacao()!=-1){
                     arquivo.append("*");
                 }
@@ -401,8 +296,8 @@ public class Eleicao {
             arquivo.append("\n");
 
             arquivo.append("Eleitos, que se beneficiaram do sistema proporcional:\n(com sua posição no ranking de mais votados)\n");
-            for (Deputado d : deputadosQueDeveriamPerder) {
-                arquivo.append((deputados.indexOf(d)+1)+" - ");
+            for (Deputado d : listaDeputadosQueDeveriamPerder) {
+                arquivo.append((listaDeputados.indexOf(d)+1)+" - ");
                 if(d.getNumeroDaFederacao()!=-1){
                     arquivo.append("*");
                 }
@@ -418,7 +313,7 @@ public class Eleicao {
             int i=1;
 
             arquivo.append("Votação dos partidos e número de candidatos eleitos:\n");
-            for (Partido p : listaDePartidos) {
+            for (Partido p : listaPartidos) {
                 arquivo.append(i+" - "+p.votosPartido()+"\n");
                 i++;
             }
@@ -432,7 +327,7 @@ public class Eleicao {
             int i=1;
 
             arquivo.append("Primeiro e último colocados de cada partido:\n");
-            for (Partido p : listaDePartidos) {
+            for (Partido p : listaPartidos) {
                 if(p.getQuantidadeDeVotosNominais() > 0) {
                     arquivo.append(i+" - "+p.maisEMenosVotados()+"\n");
                 }
@@ -474,16 +369,18 @@ public class Eleicao {
         }
     }
 
+    /*
     public void imprimePartidos(){
         System.out.println("Número de vagas: "+vagas+"\n");
         for(Partido p : partidos.values()) {
             System.out.println(p);
-            for(Deputado d : p.getDeputados().values()) {
+            for(Deputado d : p.getDeputados()) {
                 System.out.println(d);
             }
             System.out.println();
         }
     }
+    */
     
     public void imprimeInformacoes(BufferedWriter arquivo, int cargo) {
         qtdVotosValidos=qtdVotosNominais+qtdVotosDeLegenda;
@@ -494,14 +391,14 @@ public class Eleicao {
 
             preencheTodosDeputados();
             preencheTodosPartidos();
-            ordenaDeputadosPorQuantidadeDeVotos(deputados);
-            ordenaDeputadosPorQuantidadeDeVotos(deputadosEleitos);
-            ordenaPartidosPorQuantidadeDeVotos(listaDePartidos);
+            ordenaDeputadosPorQuantidadeDeVotos(listaDeputados);
+            ordenaDeputadosPorQuantidadeDeVotos(listaDeputadosEleitos);
+            ordenaPartidosPorQuantidadeDeVotos(listaPartidos);
             imprimeEleitos(arquivo, cargo);
             imprimeMaisVotados(arquivo);
             imprimeDiscrepancias(arquivo);
             imprimeVotosDosPartidos(arquivo);
-            ordenaPartidosPorDeputadoMaisVotado(listaDePartidos);
+            ordenaPartidosPorDeputadoMaisVotado(listaPartidos);
             imprimeMaisEMenosVotados(arquivo);
             imprimeEstatisticas(arquivo);
 

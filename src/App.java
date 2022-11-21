@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Scanner;
 
 public class App {
 
@@ -39,7 +38,7 @@ public class App {
             BufferedWriter arquivo = new BufferedWriter(new FileWriter(arquivoSaida));
             eleicao.preencheDeputados(arquivoConsulta, cargo, data);
             eleicao.preencheVotosDeputados(arquivoVotacao, cargo);
-            eleicao.imprimeInformacoes(arquivo, 6);
+            eleicao.imprimeInformacoes(arquivo, cargo);
             arquivo.close();
         }
         catch (FileNotFoundException e) {

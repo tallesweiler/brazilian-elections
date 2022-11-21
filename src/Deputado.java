@@ -21,18 +21,18 @@ public class Deputado {
     private LocalDate dataDeNascimento; // data de nascimento do candidato
 
     public Deputado(int cargo, int numeroDoCandidato, String nomeNaUrna, int numeroDoPartido, String siglaDoPartido, int numeroDaFederacao, String dia, String mes, String ano, LocalDate data, int genero, int foiEleito, String tipoDeVoto, int situacaoCandidato) {
-        this.cargo=cargo;
-        this.genero=genero;
-        this.foiEleito=foiEleito;
-        this.nomeNaUrna=nomeNaUrna;
-        this.tipoDeVoto=tipoDeVoto;
-        this.siglaDoPartido=siglaDoPartido;
-        this.numeroDoPartido=numeroDoPartido;
-        this.situacaoCandidato=situacaoCandidato;
-        this.numeroDaFederacao=numeroDaFederacao;
-        this.numeroDoCandidato=numeroDoCandidato;
-        this.dataDeNascimento=LocalDate.of(Integer.parseInt(ano), Integer.parseInt(mes), Integer.parseInt(dia));
-        this.idade=Period.between(dataDeNascimento, data).getYears();
+        this.cargo              = cargo;
+        this.genero             = genero;
+        this.foiEleito          = foiEleito;
+        this.nomeNaUrna         = nomeNaUrna;
+        this.tipoDeVoto         = tipoDeVoto;
+        this.siglaDoPartido     = siglaDoPartido;
+        this.numeroDoPartido    = numeroDoPartido;
+        this.situacaoCandidato  = situacaoCandidato;
+        this.numeroDaFederacao  = numeroDaFederacao;
+        this.numeroDoCandidato  = numeroDoCandidato;
+        this.dataDeNascimento   = LocalDate.of(Integer.parseInt(ano), Integer.parseInt(mes), Integer.parseInt(dia));
+        this.idade              = Period.between(dataDeNascimento, data).getYears();
     }
     public Deputado(){
         this.quantidadeDeVotos=-1;
@@ -116,8 +116,6 @@ public class Deputado {
     public void setDataDeNascimento(LocalDate dataDeNascimento) {
         this.dataDeNascimento=dataDeNascimento;
     }
-    
-   
 
     public void adicionaVotos(int valor) {
         this.setQuantidadeDeVotos(this.getQuantidadeDeVotos()+valor);
