@@ -1,7 +1,6 @@
 package src;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -10,8 +9,6 @@ import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.text.NumberFormat;
 import java.time.LocalDate;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -195,7 +192,7 @@ public class Eleicao {
         }
     }
 
-    public void ordenaDeputadosPorQuantidadeDeVotos(LinkedList<Deputado> deputados) {
+    private void ordenaDeputadosPorQuantidadeDeVotos(LinkedList<Deputado> deputados) {
         Collections.sort(deputados, new Comparator<Deputado>() {
             @Override
             public int compare(Deputado d1, Deputado d2) { 
@@ -203,7 +200,7 @@ public class Eleicao {
             } 
         });
     }
-    public void ordenaPartidosPorQuantidadeDeVotos(LinkedList<Partido> partidos) {
+    private void ordenaPartidosPorQuantidadeDeVotos(LinkedList<Partido> partidos) {
         Collections.sort(partidos, new Comparator<Partido>() {
             @Override
             public int compare(Partido p1, Partido p2) { 
@@ -215,7 +212,7 @@ public class Eleicao {
             } 
         });
     }
-    public void ordenaPartidosPorDeputadoMaisVotado(LinkedList<Partido> listaPartidos){
+    private void ordenaPartidosPorDeputadoMaisVotado(LinkedList<Partido> listaPartidos){
         Collections.sort(listaPartidos, new Comparator<Partido>() {
             @Override
             public int compare(Partido p1, Partido p2) { 
@@ -228,52 +225,50 @@ public class Eleicao {
         });
     }
     
-    public void imprimeEleitos(BufferedWriter arquivo, int cargo) {
-        try {
-            int i=1;
+    private String retornaEleitos(int cargo) {
+        int i=1;
 
-            if(cargo==6)
-                arquivo.append("Deputados federais eleitos:\n");
-            else
-                arquivo.append("Deputados estaduais eleitos:\n");
+        String string = "";
+        if(cargo==6)
+            string += ("Deputados federais eleitos:\n");
+        else
+            string += ("Deputados estaduais eleitos:\n");
 
-            for(Deputado d: listaDeputadosEleitos) {
-                arquivo.append(i+" - ");
-                if(d.getNumeroDaFederacao()!=-1) {
-                    arquivo.append("*");
-                }
-                arquivo.append(d+"\n");
-                i++;
+        for(Deputado d: listaDeputadosEleitos) {
+            string += (i+" - ");
+            if(d.getNumeroDaFederacao()!=-1) {
+                string += ("*");
             }
-            arquivo.append("\n");
-        } catch(IOException e) {
-            System.out.println(e);
+            string += (d+"\n");
+            i++;
         }
+        string += ("\n");
+
+        return string;
     }
-    public void imprimeMaisVotados(BufferedWriter arquivo){
-        try {
+    private String retornaMaisVotados(){
             int i=1;
 
-            arquivo.append("Candidatos mais votados (em ordem decrescente de votação e respeitando número de vagas):\n");
+            String string = "";
+            string += ("Candidatos mais votados (em ordem decrescente de votação e respeitando número de vagas):\n");
 
             for(Deputado d: listaDeputados) {
-                arquivo.append(i+" - ");
+                string += (i+" - ");
                 if(d.getNumeroDaFederacao()!=-1) {
-                    arquivo.append("*");
+                    string += ("*");
                 }
-                arquivo.append(d+"\n");
+                string += (d+"\n");
                 listaDeputadosMaisVotados.add(d);
 
                 i++;
                 if (i>vagas)
                     break;
             }
-            arquivo.append("\n");
-        } catch(IOException e) {
-            System.out.println(e);
-        }
+            string += ("\n");
+
+            return string;
     }
-    public void imprimeDiscrepancias(BufferedWriter arquivo) {
+    private String retornaDiscrepancias() {
         for(Deputado d : listaDeputadosEleitos) {
             if(listaDeputadosMaisVotados.indexOf(d)==-1) {
                 listaDeputadosQueDeveriamPerder.add(d);
@@ -284,126 +279,102 @@ public class Eleicao {
                 listaDeputadosQueDeveriamGanhar.add(d);
             }
         }
-        try {
-            arquivo.append("Teriam sido eleitos se a votação fosse majoritária, e não foram eleitos:\n(com sua posição no ranking de mais votados)\n");
-            for (Deputado d : listaDeputadosQueDeveriamGanhar) {
-                arquivo.append((listaDeputados.indexOf(d)+1)+" - ");
-                if(d.getNumeroDaFederacao()!=-1){
-                    arquivo.append("*");
-                }
-                arquivo.append(d+"\n");
+        String string = "";
+        string += ("Teriam sido eleitos se a votação fosse majoritária, e não foram eleitos:\n(com sua posição no ranking de mais votados)\n");
+        for (Deputado d : listaDeputadosQueDeveriamGanhar) {
+            string += ((listaDeputados.indexOf(d)+1)+" - ");
+            if(d.getNumeroDaFederacao()!=-1){
+                string += ("*");
             }
-            arquivo.append("\n");
-
-            arquivo.append("Eleitos, que se beneficiaram do sistema proporcional:\n(com sua posição no ranking de mais votados)\n");
-            for (Deputado d : listaDeputadosQueDeveriamPerder) {
-                arquivo.append((listaDeputados.indexOf(d)+1)+" - ");
-                if(d.getNumeroDaFederacao()!=-1){
-                    arquivo.append("*");
-                }
-                arquivo.append(d+"\n");
-            }
-            arquivo.append("\n");
-        } catch(IOException e) {
-            System.out.println(e);
+            string += (d+"\n");
         }
-    }
-    public void imprimeVotosDosPartidos(BufferedWriter arquivo) {
-        try {
-            int i=1;
+        string += ("\n");
 
-            arquivo.append("Votação dos partidos e número de candidatos eleitos:\n");
-            for (Partido p : listaPartidos) {
-                arquivo.append(i+" - "+p.votosPartido()+"\n");
-                i++;
+        string += ("Eleitos, que se beneficiaram do sistema proporcional:\n(com sua posição no ranking de mais votados)\n");
+        for (Deputado d : listaDeputadosQueDeveriamPerder) {
+            string += ((listaDeputados.indexOf(d)+1)+" - ");
+            if(d.getNumeroDaFederacao()!=-1){
+                string += ("*");
             }
-            arquivo.append("\n");
-        } catch(IOException e) {
-            System.out.println(e);
+            string += (d+"\n");
         }
-    }
-    public void imprimeMaisEMenosVotados(BufferedWriter arquivo){
-        try {
-            int i=1;
+        string += ("\n");
 
-            arquivo.append("Primeiro e último colocados de cada partido:\n");
-            for (Partido p : listaPartidos) {
-                if(p.getQuantidadeDeVotosNominais() > 0) {
-                    arquivo.append(i+" - "+p.maisEMenosVotados()+"\n");
-                }
-                i++;
-            }
-            arquivo.append("\n");
-        } catch(IOException e) {
-            System.out.println(e);
-        }
+        return string;
     }
-    public void imprimeEstatisticas(BufferedWriter arquivo){
-        try {
+    private String retornaVotosDosPartidos() {
+        int i=1;
+
+        String string = "";
+        string += ("Votação dos partidos e número de candidatos eleitos:\n");
+        for (Partido p : listaPartidos) {
+            string += (i+" - "+p.votosPartido()+"\n");
+            i++;
+        }
+        string += ("\n");
+        return string;
+    }
+    private String retornaMaisEMenosVotados(){
+        int i=1;
+        String string = "";
+        string += ("Primeiro e último colocados de cada partido:\n");
+        for (Partido p : listaPartidos) {
+            if(p.getQuantidadeDeVotosNominais() > 0) {
+                string += (i+" - "+p.maisEMenosVotados()+"\n");
+            }
+            i++;
+        }
+        string += ("\n");
+        return string;
+}
+    private String retornaEstatisticas(){
             Locale brLocale=Locale.forLanguageTag("pt-BR");
             NumberFormat nf=NumberFormat.getInstance(brLocale);
             NumberFormat ni=NumberFormat.getInstance(brLocale);
             nf.setGroupingUsed(true);
             nf.setMinimumFractionDigits(2);
             nf.setMaximumFractionDigits(2);
-            
-            arquivo.append("Eleitos, por faixa etária (na data da eleição):\n");
-            arquivo.append("      Idade < 30: "+ni.format(idadeMenorQue30)+" ("+nf.format(((float)idadeMenorQue30/(float)vagas)*100)+"%)\n");
-            arquivo.append("30 <= Idade < 40: "+ni.format(idadeMenorQue40)+" ("+nf.format(((float)idadeMenorQue40/(float)vagas)*100)+"%)\n");
-            arquivo.append("40 <= Idade < 50: "+ni.format(idadeMenorQue50)+" ("+nf.format(((float)idadeMenorQue50/(float)vagas)*100)+"%)\n");
-            arquivo.append("50 <= Idade < 60: "+ni.format(idadeMenorQue60)+" ("+nf.format(((float)idadeMenorQue60/(float)vagas)*100)+"%)\n");
-            arquivo.append("60 <= Idade     : "+ni.format(idadeMaiorQue60)+" ("+nf.format(((float)idadeMaiorQue60/(float)vagas)*100)+"%)\n");
-            arquivo.append("\n");
+            String string = "";
+            string += ("Eleitos, por faixa etária (na data da eleição):\n");
+            string += ("      Idade < 30: "+ni.format(idadeMenorQue30)+" ("+nf.format(((float)idadeMenorQue30/(float)vagas)*100)+"%)\n");
+            string += ("30 <= Idade < 40: "+ni.format(idadeMenorQue40)+" ("+nf.format(((float)idadeMenorQue40/(float)vagas)*100)+"%)\n");
+            string += ("40 <= Idade < 50: "+ni.format(idadeMenorQue50)+" ("+nf.format(((float)idadeMenorQue50/(float)vagas)*100)+"%)\n");
+            string += ("50 <= Idade < 60: "+ni.format(idadeMenorQue60)+" ("+nf.format(((float)idadeMenorQue60/(float)vagas)*100)+"%)\n");
+            string += ("60 <= Idade     : "+ni.format(idadeMaiorQue60)+" ("+nf.format(((float)idadeMaiorQue60/(float)vagas)*100)+"%)\n");
+            string += ("\n");
 
-            arquivo.append("Eleitos, por gênero:\n");
-            arquivo.append("Feminino:  "+ni.format(qtdFeminino)+" ("+nf.format(((float)qtdFeminino/(float)vagas)*100)+"%)\n");
-            arquivo.append("Masculino: "+ni.format(qtdMasculino)+" ("+nf.format(((float)qtdMasculino/(float)vagas)*100)+"%)\n");
-            arquivo.append("\n");
+            string += ("Eleitos, por gênero:\n");
+            string += ("Feminino:  "+ni.format(qtdFeminino)+" ("+nf.format(((float)qtdFeminino/(float)vagas)*100)+"%)\n");
+            string += ("Masculino: "+ni.format(qtdMasculino)+" ("+nf.format(((float)qtdMasculino/(float)vagas)*100)+"%)\n");
+            string += ("\n");
 
-            arquivo.append("Total de votos válidos:    "+ni.format(qtdVotosValidos)+"\n");
-            arquivo.append("Total de votos nominais:   "+ni.format(qtdVotosNominais)+" ("+nf.format(((float)qtdVotosNominais/(float)qtdVotosValidos)*100)+"%)\n");
-            arquivo.append("Total de votos de legenda: "+ni.format(qtdVotosDeLegenda)+" ("+nf.format(((float)qtdVotosDeLegenda/(float)qtdVotosValidos)*100)+"%)\n");
+            string += ("Total de votos válidos:    "+ni.format(qtdVotosValidos)+"\n");
+            string += ("Total de votos nominais:   "+ni.format(qtdVotosNominais)+" ("+nf.format(((float)qtdVotosNominais/(float)qtdVotosValidos)*100)+"%)\n");
+            string += ("Total de votos de legenda: "+ni.format(qtdVotosDeLegenda)+" ("+nf.format(((float)qtdVotosDeLegenda/(float)qtdVotosValidos)*100)+"%)\n");
 
-        } catch(IOException e) {
-            System.out.println(e);
-        }
+            return string;
     }
-
-    /*
-    public void imprimePartidos(){
-        System.out.println("Número de vagas: "+vagas+"\n");
-        for(Partido p : partidos.values()) {
-            System.out.println(p);
-            for(Deputado d : p.getDeputados()) {
-                System.out.println(d);
-            }
-            System.out.println();
-        }
-    }
-    */
     
-    public void imprimeInformacoes(BufferedWriter arquivo, int cargo) {
+    public String retornaInformacoes(int cargo) {
         qtdVotosValidos=qtdVotosNominais+qtdVotosDeLegenda;
-        try {
-            Locale brLocale=Locale.forLanguageTag("pt-BR");
-            NumberFormat ni=NumberFormat.getInstance(brLocale);
-            arquivo.append("Número de vagas: "+ni.format(vagas)+"\n\n");
+        preencheTodosDeputados();
+        preencheTodosPartidos();
+        ordenaDeputadosPorQuantidadeDeVotos(listaDeputados);
+        ordenaDeputadosPorQuantidadeDeVotos(listaDeputadosEleitos);
+        ordenaPartidosPorQuantidadeDeVotos(listaPartidos);
+        
+        Locale brLocale=Locale.forLanguageTag("pt-BR");
+        NumberFormat ni=NumberFormat.getInstance(brLocale);
+        String informacoes = "";
+        informacoes += ("Número de vagas: "+ni.format(vagas)+"\n\n");
+        informacoes += retornaEleitos(cargo);
+        informacoes += retornaMaisVotados();
+        informacoes += retornaDiscrepancias();
+        informacoes += retornaVotosDosPartidos();
+        ordenaPartidosPorDeputadoMaisVotado(listaPartidos);
+        informacoes += retornaMaisEMenosVotados();
+        informacoes += retornaEstatisticas();
 
-            preencheTodosDeputados();
-            preencheTodosPartidos();
-            ordenaDeputadosPorQuantidadeDeVotos(listaDeputados);
-            ordenaDeputadosPorQuantidadeDeVotos(listaDeputadosEleitos);
-            ordenaPartidosPorQuantidadeDeVotos(listaPartidos);
-            imprimeEleitos(arquivo, cargo);
-            imprimeMaisVotados(arquivo);
-            imprimeDiscrepancias(arquivo);
-            imprimeVotosDosPartidos(arquivo);
-            ordenaPartidosPorDeputadoMaisVotado(listaPartidos);
-            imprimeMaisEMenosVotados(arquivo);
-            imprimeEstatisticas(arquivo);
-
-        } catch(IOException e) {
-            System.out.println(e);
-        }
-    }
+        return informacoes;
+}
 }

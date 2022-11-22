@@ -1,28 +1,22 @@
 package src;
 
-import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 
 public class App {
 
     public static void main(String[] args) throws IOException, FileNotFoundException {
-        // --federal/--estadual consulta_cand votacao_secao 20/11/2022
         int cargo;
         String arquivoConsulta;
         String arquivoVotacao;
-        String arquivoSaida = "output-";
         LocalDate data;
 
         if(args[0].equals("--federal")){
             cargo = 6;
-            arquivoSaida += "federal.txt";
         }
         else if(args[0].equals("--estadual")){
             cargo = 7;
-            arquivoSaida += "estadual.txt";
         }
         else{
             return;
@@ -35,11 +29,9 @@ public class App {
     
         Eleicao eleicao = new Eleicao();
         try {
-            BufferedWriter arquivo = new BufferedWriter(new FileWriter(arquivoSaida));
             eleicao.preencheDeputados(arquivoConsulta, cargo, data);
             eleicao.preencheVotosDeputados(arquivoVotacao, cargo);
-            eleicao.imprimeInformacoes(arquivo, cargo);
-            arquivo.close();
+            System.out.println(eleicao.retornaInformacoes(cargo));
         }
         catch (FileNotFoundException e) {
             System.out.println(e);
