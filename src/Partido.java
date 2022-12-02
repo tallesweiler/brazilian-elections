@@ -1,5 +1,3 @@
-package src;
-
 import java.text.NumberFormat;
 import java.util.LinkedList;
 import java.util.Locale;
