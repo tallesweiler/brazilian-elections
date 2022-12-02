@@ -1,5 +1,3 @@
-package src;
-
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.Period;
