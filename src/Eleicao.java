@@ -59,17 +59,23 @@ public class Eleicao {
         deputados                          = new HashMap<>();
     }
     
-    public void preencheDeputados(String nomeArquivo, int cargo, LocalDate data) throws FileNotFoundException, IOException {
+    // acessa o arquivo com as informações de cada deputado e constrói todos os partidos e candidatos válidos
+    public void preencheDeputados(String nomeArquivo, int cargo, LocalDate data) throws FileNotFoundException, UnsupportedEncodingException, IOException {
+        // define a codificação do arquivo e constrói um reader
         try(FileInputStream in=new FileInputStream(nomeArquivo);
             Reader r=new InputStreamReader(in, "ISO-8859-1");
             BufferedReader br=new BufferedReader(r);) 
         {
-            String linha = br.readLine(); // consome a primeira linha
             String[] infoCandidato = null;
+
+            // consome a primeira linha (cabeçalho da planilha)
+            String linha = br.readLine();
             while((linha = br.readLine()) != null){
+                // remove todas as aspas da linha
                 linha = linha.replaceAll("\"", "");
-                //System.out.println(linha);
+                // divide a linha com base nos ";"
                 infoCandidato = linha.split(";");
+                // posições específicas de cada informação
                 int CD_CARGO                        = Integer.parseInt(infoCandidato[13]);
                 int NR_CANDIDATO                    = Integer.parseInt(infoCandidato[16]);
                 String NM_URNA_CANDIDATO            = infoCandidato[18];
@@ -82,26 +88,27 @@ public class Eleicao {
                 String NM_TIPO_DESTINACAO_VOTOS     = infoCandidato[67];
                 int CD_SITUACAO_CANDIDATO_TOT       = Integer.parseInt(infoCandidato[68]);
 
+                // caso o partido ainda não exista, cria-se um novo partido
                 if(partidos.get(NR_PARTIDO) == null){
                     partidos.put(NR_PARTIDO, new Partido(NR_PARTIDO, SG_PARTIDO));
                 }
+                // caso o deputado seja de nosso interesse
                 if(CD_CARGO == cargo){
+                    // caso o deputado seja válido ou válido (legenda), ele será criado e adicionado no hashmap
                     if((CD_SITUACAO_CANDIDATO_TOT == 2 || CD_SITUACAO_CANDIDATO_TOT == 16) || NM_TIPO_DESTINACAO_VOTOS.equals("Válido (legenda)")){
                         preencheDeputado(CD_CARGO, NR_CANDIDATO, NM_URNA_CANDIDATO, NR_PARTIDO, SG_PARTIDO, NR_FEDERACAO, DT_NASCIMENTO, CD_GENERO, CD_SIT_TOT_TURNO, NM_TIPO_DESTINACAO_VOTOS, CD_SITUACAO_CANDIDATO_TOT, data);
                     }
                 }
             }
-        } catch (UnsupportedEncodingException e) {
-            System.out.println(e);
-        } catch (IOException e) {
-            System.out.println(e);
         }
     }
     private void preencheDeputado(int CD_CARGO, int NR_CANDIDATO, String NM_URNA_CANDIDATO, int NR_PARTIDO, String SG_PARTIDO, int NR_FEDERACAO, String DT_NASCIMENTO, int CD_GENERO, int CD_SIT_TOT_TURNO, String NM_TIPO_DESTINACAO_VOTOS, int CD_SITUACAO_CANDIDATO_TOT, LocalDate data) {
 
+        // divide a string data em dia, mes e ano
         String[] data2 = DT_NASCIMENTO.split("/");
         Deputado novoDeputado = new Deputado(CD_CARGO, NR_CANDIDATO, NM_URNA_CANDIDATO, NR_PARTIDO, SG_PARTIDO, NR_FEDERACAO, data2[0], data2[1], data2[2], data, CD_GENERO, CD_SIT_TOT_TURNO, NM_TIPO_DESTINACAO_VOTOS, CD_SITUACAO_CANDIDATO_TOT);
 
+        // caso o deputado seja eleito, geram-se estatisticas
         if(CD_SIT_TOT_TURNO == 2 || CD_SIT_TOT_TURNO == 3) {
             vagas++;
 
@@ -124,63 +131,76 @@ public class Eleicao {
             listaDeputadosEleitos.add(novoDeputado);
             partidos.get(NR_PARTIDO).adicionaEleito();
         };
+        // adiciona o novo deputado ao hashmap
         deputados.put(NR_CANDIDATO, novoDeputado);
     }
 
-    public void preencheVotosDeputados(String nomeArquivo, int cargo) throws FileNotFoundException, IOException {
+    // acessa o arquivo com as informações de cada voto e adiciona os votos aos candidatos
+    public void preencheVotosDeputados(String nomeArquivo, int cargo) throws FileNotFoundException, UnsupportedEncodingException, IOException {
+        // define a codificação do arquivo e constrói um reader
         try(FileInputStream in=new FileInputStream(nomeArquivo);
             Reader r=new InputStreamReader(in, "ISO-8859-1");
             BufferedReader br=new BufferedReader(r);) 
         {
             String[] infoVotacao = null;
+
+            // consome a primeira linha (cabeçalho da planilha)
             String linha = br.readLine();
             while((linha = br.readLine()) != null){
+                // remove todas as aspas da linha
                 linha = linha.replaceAll("\"", "");
-                //System.out.println(linha);
+                // divide a linha com base nos ";"
                 infoVotacao = linha.split(";");
 
+                // posições específicas de cada informação
                 int CD_CARGO    = Integer.parseInt(infoVotacao[17]);
                 int NR_VOTAVEL  = Integer.parseInt(infoVotacao[19]);
                 int QT_VOTOS    = Integer.parseInt(infoVotacao[21]);
 
+                // caso o voto seja de nosso interesse
                 if(CD_CARGO == cargo && !(NR_VOTAVEL >= 95 && NR_VOTAVEL <= 98)){
+                    // o voto é computado
                     preencheVotosDeputado(CD_CARGO, NR_VOTAVEL, QT_VOTOS);
                 }
             }
-        } catch (UnsupportedEncodingException e) {
-            System.out.println(e);
-        } catch (IOException e) {
-            System.out.println(e);
         }
+
     }
     private void preencheVotosDeputado(int CD_CARGO, int NR_VOTAVEL, int QT_VOTOS) {
        
         Partido partidoTemp = partidos.get(NR_VOTAVEL);
-        if(partidoTemp == null){ // voto em deputado
+        // caso o partido não exista, o voto foi feito em um candidato
+        if(partidoTemp == null){ 
             Deputado deputadoTemp = deputados.get(NR_VOTAVEL);
+            // caso o candidato não exista
             if(deputadoTemp == null){
                 return;
             }
             partidoTemp = partidos.get(deputadoTemp.getNumeroDoPartido());
+            // caso candidato seja de legenda, o voto irá para a legenda
             if(deputadoTemp.getTipoDeVoto().equals("Válido (legenda)")){
                 partidoTemp.adicionaVotosDeLegenda(QT_VOTOS);
                 qtdVotosDeLegenda+=QT_VOTOS;
             }
+            // caso contrário, irá para o deputado
             else{
                 deputadoTemp.adicionaVotos(QT_VOTOS);
                 partidoTemp.adicionaVotosNominais(QT_VOTOS);
                 qtdVotosNominais+=QT_VOTOS;
             }
         }
-        else{ // voto em partido
+        // caso contrário, o voto foi feito em um partido
+        else{
             partidoTemp.adicionaVotosDeLegenda(QT_VOTOS);
             qtdVotosDeLegenda+=QT_VOTOS;
         }
     }
 
+    // após contabilizar todas os votos, as informações são passadas para listas para fins de ordenação
     private void preencheTodosDeputados() {
         for(Deputado d : deputados.values()) {
             listaDeputados.add(d);
+            // deputado também é adicionado dentro do partido
             partidos.get(d.getNumeroDoPartido()).adicionaDeputado(d);;
         }
     }
@@ -190,6 +210,7 @@ public class Eleicao {
         }
     }
 
+    // constroi classes anonimas que extendem a classe Comparator, para ordenar os deputados/partidos em diferentes critérios
     private void ordenaDeputadosPorQuantidadeDeVotos(LinkedList<Deputado> deputados) {
         Collections.sort(deputados, new Comparator<Deputado>() {
             @Override
@@ -223,6 +244,7 @@ public class Eleicao {
         });
     }
     
+    // retorna string contendo a saída número 2: Candidatos eleitos (nome completo e na urna), indicado partido e número de votos nominais
     private String retornaEleitos(int cargo) {
         int i=1;
 
@@ -244,6 +266,7 @@ public class Eleicao {
 
         return string;
     }
+    // retorna string contendo a saída número 3: Candidatos mais votados dentro do número de vagas
     private String retornaMaisVotados(){
             int i=1;
 
@@ -266,6 +289,7 @@ public class Eleicao {
 
             return string;
     }
+    // retorna string contendo as saídas:
     private String retornaDiscrepancias() {
         for(Deputado d : listaDeputadosEleitos) {
             if(listaDeputadosMaisVotados.indexOf(d)==-1) {
@@ -277,6 +301,7 @@ public class Eleicao {
                 listaDeputadosQueDeveriamGanhar.add(d);
             }
         }
+        // número 4: Candidatos não eleitos e que seriam eleitos se a votação fosse majoritária
         String string = "";
         string += ("Teriam sido eleitos se a votação fosse majoritária, e não foram eleitos:\n(com sua posição no ranking de mais votados)\n");
         for (Deputado d : listaDeputadosQueDeveriamGanhar) {
@@ -287,7 +312,7 @@ public class Eleicao {
             string += (d+"\n");
         }
         string += ("\n");
-
+        // número 5: Candidatos eleitos no sistema proporcional vigente, e que não seriam eleitos se a votação fosse majoritária, isto é, pelo número de votos apenas que um candidato recebe diretamente
         string += ("Eleitos, que se beneficiaram do sistema proporcional:\n(com sua posição no ranking de mais votados)\n");
         for (Deputado d : listaDeputadosQueDeveriamPerder) {
             string += ((listaDeputados.indexOf(d)+1)+" - ");
@@ -300,6 +325,7 @@ public class Eleicao {
 
         return string;
     }
+    // retorna string contendo a saída número 6: Votos totalizados por partido e número de candidatos eleitos
     private String retornaVotosDosPartidos() {
         int i=1;
 
@@ -312,47 +338,55 @@ public class Eleicao {
         string += ("\n");
         return string;
     }
+    // retorna string contendo a saída número 8: Primeiro e último colocados de cada partido (com nome da urna, número do candidato e total de votos nominais). Partidos que não possuírem candidatos com um número positivo de votos válidos devem ser ignorados
     private String retornaMaisEMenosVotados(){
         int i=1;
         String string = "";
         string += ("Primeiro e último colocados de cada partido:\n");
         for (Partido p : listaPartidos) {
             if(p.getQuantidadeDeVotosNominais() > 0) {
-                string += (i+" - "+p.maisEMenosVotados()+"\n");
+                string += (i+" - "+p.toStringMaisEMenosVotados()+"\n");
             }
             i++;
         }
         string += ("\n");
         return string;
-}
+    }
+    // retorna string contendo as saídas:
     private String retornaEstatisticas(){
-            Locale brLocale=Locale.forLanguageTag("pt-BR");
-            NumberFormat nf=NumberFormat.getInstance(brLocale);
-            NumberFormat ni=NumberFormat.getInstance(brLocale);
-            nf.setGroupingUsed(true);
-            nf.setMinimumFractionDigits(2);
-            nf.setMaximumFractionDigits(2);
-            String string = "";
-            string += ("Eleitos, por faixa etária (na data da eleição):\n");
-            string += ("      Idade < 30: "+ni.format(idadeMenorQue30)+" ("+nf.format(((float)idadeMenorQue30/(float)vagas)*100)+"%)\n");
-            string += ("30 <= Idade < 40: "+ni.format(idadeMenorQue40)+" ("+nf.format(((float)idadeMenorQue40/(float)vagas)*100)+"%)\n");
-            string += ("40 <= Idade < 50: "+ni.format(idadeMenorQue50)+" ("+nf.format(((float)idadeMenorQue50/(float)vagas)*100)+"%)\n");
-            string += ("50 <= Idade < 60: "+ni.format(idadeMenorQue60)+" ("+nf.format(((float)idadeMenorQue60/(float)vagas)*100)+"%)\n");
-            string += ("60 <= Idade     : "+ni.format(idadeMaiorQue60)+" ("+nf.format(((float)idadeMaiorQue60/(float)vagas)*100)+"%)\n");
-            string += ("\n");
+        // instancia um formatador de números para pt-BR
+        Locale brLocale=Locale.forLanguageTag("pt-BR");
+        NumberFormat nf=NumberFormat.getInstance(brLocale);
+        NumberFormat ni=NumberFormat.getInstance(brLocale);
+        nf.setGroupingUsed(true);
+        nf.setMinimumFractionDigits(2);
+        nf.setMaximumFractionDigits(2);
+        
+        String string = "";
+        // número 9: Distribuição de eleitos por faixa etária, considerando a idade do candidato no dia da eleição
+        string += ("Eleitos, por faixa etária (na data da eleição):\n");
+        string += ("      Idade < 30: "+ni.format(idadeMenorQue30)+" ("+nf.format(((float)idadeMenorQue30/(float)vagas)*100)+"%)\n");
+        string += ("30 <= Idade < 40: "+ni.format(idadeMenorQue40)+" ("+nf.format(((float)idadeMenorQue40/(float)vagas)*100)+"%)\n");
+        string += ("40 <= Idade < 50: "+ni.format(idadeMenorQue50)+" ("+nf.format(((float)idadeMenorQue50/(float)vagas)*100)+"%)\n");
+        string += ("50 <= Idade < 60: "+ni.format(idadeMenorQue60)+" ("+nf.format(((float)idadeMenorQue60/(float)vagas)*100)+"%)\n");
+        string += ("60 <= Idade     : "+ni.format(idadeMaiorQue60)+" ("+nf.format(((float)idadeMaiorQue60/(float)vagas)*100)+"%)\n");
+        string += ("\n");
 
-            string += ("Eleitos, por gênero:\n");
-            string += ("Feminino:  "+ni.format(qtdFeminino)+" ("+nf.format(((float)qtdFeminino/(float)vagas)*100)+"%)\n");
-            string += ("Masculino: "+ni.format(qtdMasculino)+" ("+nf.format(((float)qtdMasculino/(float)vagas)*100)+"%)\n");
-            string += ("\n");
+        // número 10: Distribuição de eleitos por sexo
+        string += ("Eleitos, por gênero:\n");
+        string += ("Feminino:  "+ni.format(qtdFeminino)+" ("+nf.format(((float)qtdFeminino/(float)vagas)*100)+"%)\n");
+        string += ("Masculino: "+ni.format(qtdMasculino)+" ("+nf.format(((float)qtdMasculino/(float)vagas)*100)+"%)\n");
+        string += ("\n");
 
-            string += ("Total de votos válidos:    "+ni.format(qtdVotosValidos)+"\n");
-            string += ("Total de votos nominais:   "+ni.format(qtdVotosNominais)+" ("+nf.format(((float)qtdVotosNominais/(float)qtdVotosValidos)*100)+"%)\n");
-            string += ("Total de votos de legenda: "+ni.format(qtdVotosDeLegenda)+" ("+nf.format(((float)qtdVotosDeLegenda/(float)qtdVotosValidos)*100)+"%)\n");
+        // número 11: Total de votos, total de votos nominais e total de votos de legenda
+        string += ("Total de votos válidos:    "+ni.format(qtdVotosValidos)+"\n");
+        string += ("Total de votos nominais:   "+ni.format(qtdVotosNominais)+" ("+nf.format(((float)qtdVotosNominais/(float)qtdVotosValidos)*100)+"%)\n");
+        string += ("Total de votos de legenda: "+ni.format(qtdVotosDeLegenda)+" ("+nf.format(((float)qtdVotosDeLegenda/(float)qtdVotosValidos)*100)+"%)\n");
 
-            return string;
+        return string;
     }
     
+    // retorna uma string contendo todas as saídas especificadas no relatório
     public String retornaInformacoes(int cargo) {
         qtdVotosValidos=qtdVotosNominais+qtdVotosDeLegenda;
         preencheTodosDeputados();
@@ -361,10 +395,9 @@ public class Eleicao {
         ordenaDeputadosPorQuantidadeDeVotos(listaDeputadosEleitos);
         ordenaPartidosPorQuantidadeDeVotos(listaPartidos);
         
-        Locale brLocale=Locale.forLanguageTag("pt-BR");
-        NumberFormat ni=NumberFormat.getInstance(brLocale);
         String informacoes = "";
-        informacoes += ("Número de vagas: "+ni.format(vagas)+"\n\n");
+        // retorna string contendo a saída 1: Número de vagas (= número de eleitos)
+        informacoes += ("Número de vagas: "+vagas+"\n\n");
         informacoes += retornaEleitos(cargo);
         informacoes += retornaMaisVotados();
         informacoes += retornaDiscrepancias();

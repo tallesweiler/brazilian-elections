@@ -18,6 +18,7 @@ public class Deputado {
     private String siglaDoPartido;      // sigla do partido;
     private LocalDate dataDeNascimento; // data de nascimento do candidato
 
+    // construtor padrão do candidato
     public Deputado(int cargo, int numeroDoCandidato, String nomeNaUrna, int numeroDoPartido, String siglaDoPartido, int numeroDaFederacao, String dia, String mes, String ano, LocalDate data, int genero, int foiEleito, String tipoDeVoto, int situacaoCandidato) {
         this.cargo              = cargo;
         this.genero             = genero;
@@ -32,10 +33,12 @@ public class Deputado {
         this.dataDeNascimento   = LocalDate.of(Integer.parseInt(ano), Integer.parseInt(mes), Integer.parseInt(dia));
         this.idade              = Period.between(dataDeNascimento, data).getYears();
     }
+    // construtor para fins de comparação
     public Deputado(){
-        this.quantidadeDeVotos=-1;
+        this.quantidadeDeVotos  = -1;
     }
     
+    // getters e setters para os atributos do candidato
     public int getCargo() {
         return cargo;
     }
@@ -115,10 +118,13 @@ public class Deputado {
         this.dataDeNascimento=dataDeNascimento;
     }
 
+    // função para adicionar votos ao candidato
     public void adicionaVotos(int valor) {
-        this.setQuantidadeDeVotos(this.getQuantidadeDeVotos()+valor);
+        this.quantidadeDeVotos += valor;
     }
+    // toString padrão do candidato
     public String toString() {
+        // instancia um formatador de números para pt-BR
         Locale brLocale=Locale.forLanguageTag("pt-BR");
         NumberFormat nf=NumberFormat.getInstance(brLocale);
         
@@ -127,7 +133,9 @@ public class Deputado {
         else
             return nomeNaUrna+" ("+siglaDoPartido+", "+nf.format(quantidadeDeVotos)+" voto)";
     }
-    public String maisEMenosVotado() {
+    // toString para a análise de mais e menos votado
+    public String toStringMaisEMenosVotado() {
+        // instancia um formatador de números para pt-BR
         Locale brLocale=Locale.forLanguageTag("pt-BR");
         NumberFormat nf=NumberFormat.getInstance(brLocale);
         
