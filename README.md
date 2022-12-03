@@ -21,7 +21,7 @@ O programa é compilado utilizando o <b>Apache Ant</b> através de um <b>build.x
 <h5>Diagrama de classes:</h5>
 <img src="doc/diagrama-de-classes.png">
 <p>
-Para fins de otimização, utilizamos dois hashmaps ("deputados" e "partidos") durante toda a leitura dos arquivos, para facilitar a inserção dos votos contabilizados. Após a leitura, utilizamos diversas listas para ordenar os deputados/partidos nos diversos critérios solicitados no relatório. Por fim, transformamos todos esses resultados obtidos em uma string e retornamos para o <b>App</b>, onde é impresso no terminal.<br><br>
+Para fins de otimização, utilizamos dois hashmaps ("deputados" e "partidos") durante toda a leitura dos arquivos, para facilitar a inserção dos votos contabilizados. Após a leitura, utilizamos diversas listas para ordenar os deputados/partidos nos diversos critérios solicitados no relatório. Por fim, transformamos todos esses resultados em uma string e retornamos para o <b>App</b>, onde é impresso no terminal.<br><br>
 <b>Eleicao</b> é nossa classe principal e a única utilizada no <b>App</b>. Ela possui somente três métodos públicos:
 
 - <b>preencheDeputados()</b>
@@ -37,7 +37,7 @@ As classes <b>Deputado</b> e <b>Partido</b> possuem diversos métodos e atributo
 <p>
 Foram utilizados para testes os seis casos fornecidos pelo professor (Acre, Alagoas, Espirito Santo, Minas Gerais, Pernambuco e Rio Grande do Sul), além de outros arquivos encontrados nos links:
 
-- https://cdn.tse.jus.br/estatistica/sead/odsele/consulta_cand/consulta_cand_2022.zip> (candidatos)
+- https://cdn.tse.jus.br/estatistica/sead/odsele/consulta_cand/consulta_cand_2022.zip (candidatos)
 - https://cdn.tse.jus.br/estatistica/sead/odsele/votacao_secao/votacao_secao_2022_SP.zip (votacao)
 
 Rodamos todos os estados e em nenhum deles ocorreu algum erro, porém só comparamos as saídas com os casos fornecidos pelo professor. Além disso fizemos e testamos alguns tratamentos de erros, como falha ao abrir arquivos ou argumentos insuficientes para o funcionamento do programa, todos esses erros são devolvidos para o App e é printada uma mensagem na tela especificando o ocorrido.
