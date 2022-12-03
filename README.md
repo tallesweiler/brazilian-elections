@@ -18,7 +18,17 @@ O programa é compilado utilizando o <b>Apache Ant</b> através de um <b>build.x
 </p>
 
 <h3>Implementação do código:</h3>
+<h5>Diagrama de classes:</h5>
+<img src="doc/diagrama-de-classes.png">
 <p>
+Para fins de otimização, utilizamos dois hashmaps ("deputados" e "partidos") durante toda a leitura dos arquivos, para facilitar a inserção dos votos contabilizados. Após a leitura, utilizamos diversas listas para ordenar os deputados/partidos nos diversos critérios solicitados no relatório. Por fim, transformamos todos esses resultados obtidos em uma string e retornamos para o <b>App</b>, onde é impresso no terminal.<br><br>
+<b>Eleicao</b> é nossa classe principal e a única utilizada no <b>App</b>. Ela possui somente três métodos públicos:
+
+- <b>preencheDeputados()</b>
+- <b>preencheVotosDeputados()</b>
+- <b>retornaInformacoes()</b>
+
+As classes <b>Deputado</b> e <b>Partido</b> possuem diversos métodos e atributos tanto públicos quanto privados que estão documentados ao longo do código. Essas classes somente são utilizadas dentro da classe <b>Eleicao</b>, assim um programa cliente (em nosso caso <b>App</b>) não tem acesso a elas.
 
 </p>
 
