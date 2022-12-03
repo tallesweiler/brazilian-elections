@@ -26,7 +26,7 @@
         </jar>
     </target>
 
-	<!-- Execução normal. -->
+	<!-- Execução normal para federal -->
 	<target name="run-federal" depends="compile" description="Executa o programa principal, em modo normal.">
 		<java fork="yes" classname="${mainClass}">
 			<arg value="--federal" />
@@ -39,7 +39,7 @@
 		</java>
 	</target>
 
-	<!-- Execução normal. -->
+	<!-- Execução normal para estadual -->
 	<target name="run-estadual" depends="compile" description="Executa o programa principal, em modo normal.">
 		<java fork="yes" classname="${mainClass}">
 			<arg value="--estadual" />
