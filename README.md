@@ -40,7 +40,7 @@ Foram utilizados para testes os seis casos fornecidos pelo professor (Acre, Alag
 - https://cdn.tse.jus.br/estatistica/sead/odsele/consulta_cand/consulta_cand_2022.zip (candidatos)
 - https://cdn.tse.jus.br/estatistica/sead/odsele/votacao_secao/votacao_secao_2022_SP.zip (votacao)
 
-Rodamos todos os estados e em nenhum deles ocorreu algum erro, porém só comparamos as saídas com os casos fornecidos pelo professor. Além disso fizemos e testamos alguns tratamentos de erros, como falha ao abrir arquivos ou argumentos insuficientes para o funcionamento do programa, todos esses erros são devolvidos para o App e é printada uma mensagem na tela especificando o ocorrido.
+Rodamos todos os estados e em nenhum deles ocorreu algum erro, porém só comparamos as saídas com os casos fornecidos pelo professor. Além disso, fizemos e testamos alguns tratamentos de erros, como falha ao abrir arquivos ou argumentos insuficientes para o funcionamento do programa, todos esses erros são devolvidos para o App e é printada uma mensagem na tela especificando o ocorrido.
 
 </p>
 
@@ -52,7 +52,7 @@ Rodamos todos os estados e em nenhum deles ocorreu algum erro, porém só compar
 
 - <b>Voto em pessoa indeferida porém não anulada:</b> em raros casos existia um voto em um candidato não deferido que não estava anulado no arquivo do TSE (o bug foi resolvido simplesmente ignorando o voto quando não existe nem partido e nem candidato com aquele número votável).
 
-- <b>Leitura ineficiente dos arquivos:</b> nas primeiras versões do programa, todas as linhas eram lidas, além de serem scaneadas por cada pedaço delas, ocasionando um tempo de execução muito alto, como por exemplo minas gerais, que demorou três minutos para gerar a saída (o bug foi resolvido ao ler a linha inteira de uma vez e usar a função split, realizando nossas análises somente quando os requisitos eram cumpridos).
+- <b>Leitura ineficiente dos arquivos:</b> nas primeiras versões do programa, todas as linhas eram lidas, além de serem escaneadas por cada pedaço delas, ocasionando um tempo de execução muito alto, como por exemplo minas gerais, que demorou três minutos para gerar a saída (o bug foi resolvido ao ler a linha inteira de uma vez e usar a função split, realizando nossas análises somente quando os requisitos eram cumpridos).
 
 - <b>Tempo de execução:</b> nas primeiras versões do programa, tudo era feito em listas, o que tornava o acesso para contabilização de cada voto muito lento (o bug foi resolvido utilizando-se hashmaps, criando listas somente quando fosse necessário ordenar as informações).
 
